@@ -13,16 +13,36 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'   // 스프링 부트 스타터
-
-    compileOnly 'org.projectlombok:lombok'  // 롬복
-    annotationProcessor 'org.projectlombok:lombok'
-
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.projectlombok:lombok'
+
+    // jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.projectlombok:lombok'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'javax.activation:activation:1.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.0.1'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
+
+    // mysql connector
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // jasypt - 데이터 암호화 라이브러리
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+
+    // h2
+    runtimeOnly 'com.h2database:h2' // 인메모리 데이터베이스
 }
 
 test {
     useJUnitPlatform()
+    systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
 }
