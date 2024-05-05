@@ -40,6 +40,9 @@ dependencies {
 
     // h2
     runtimeOnly 'com.h2database:h2' // 인메모리 데이터베이스
+
+    // WebClient
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 test {
