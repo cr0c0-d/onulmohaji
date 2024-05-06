@@ -26,9 +26,6 @@ public class PopupstoreDetail {
     @Column
     private String images;
 
-    @Column(name = "relation_store_ids")
-    private Long relationStoreIds;
-
     @Column
     private String notice;
 
@@ -44,9 +41,6 @@ public class PopupstoreDetail {
     @Column
     private boolean free;
 
-    @Column
-    private boolean kids;
-
     @Column(name = "no_kids")
     private boolean noKids;
 
@@ -61,12 +55,6 @@ public class PopupstoreDetail {
 
     @Column
     private boolean wifi;
-
-    @Column
-    private String etc;
-
-    @Column
-    private String etc2;
 
     @Column(name = "created_at")
     private String createdAt;

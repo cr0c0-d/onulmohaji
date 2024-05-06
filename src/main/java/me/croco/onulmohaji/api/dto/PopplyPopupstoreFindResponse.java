@@ -21,8 +21,6 @@ public class PopplyPopupstoreFindResponse {
 
     private String name;
 
-    private Long brandId;
-
     private int categoryId;
 
     private String mainBrand;
@@ -31,19 +29,11 @@ public class PopplyPopupstoreFindResponse {
 
     private String brand_2;
 
-    private String brand_3;
-
-    private String brand_4;
-
     private String title;
 
     private String topLevelAddress;
 
     private String address;
-
-    private String detailAddress;
-
-    private String parking;
 
     private boolean preRegister;
 
@@ -67,15 +57,9 @@ public class PopplyPopupstoreFindResponse {
 
     private String endDate;
 
-    private boolean isExpired;
-
     private String workingTime;
 
     private String status;
-
-    private String createdAt;
-
-    private String updatedAt;
 
     private PopupstoreDetail storeDetail;
 
