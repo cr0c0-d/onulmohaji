@@ -9,6 +9,7 @@ import me.croco.onulmohaji.repository.PopupstoreImageRepository;
 import me.croco.onulmohaji.repository.PopupstoreRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -28,5 +29,9 @@ public class PopupstoreService {
             popupstoreDetailRepository.save(response.getStoreDetail());
             response.getStoreImage().forEach(popupstoreImageRepository::save);
         });
+    }
+
+    public List<Popupstore> findPopupstoreListByDate(String date) {
+        return popupstoreRepository.findPopupstoreListByDate(LocalDate.parse((CharSequence) date));
     }
 }
