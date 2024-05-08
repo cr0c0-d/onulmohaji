@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExhibitionController {
 
     private final ExhibitionSearchService exhibitionSearchService;
+    private final ExhibitionService exhibitionService;
+
+    @GetMapping("/api/exhibition/new")
+    public void searchLocal() {
+        exhibitionSearchService.getNewExhibitions();
+    }
 
     @GetMapping("/api/exhibition")
     public ResponseEntity<ExhibitionListFindResponse> searchLocal(@RequestBody ExhibitionListFindRequest request) {
