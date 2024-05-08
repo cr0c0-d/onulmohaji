@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.croco.onulmohaji.domain.Exhibition;
 import me.croco.onulmohaji.domain.Popupstore;
+import org.springframework.web.util.HtmlUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +30,7 @@ public class PlaceListFindResponse {
 
     public PlaceListFindResponse(Popupstore popupstore) {
         this.id = popupstore.getStoreId();
-        this.title = popupstore.getTitle();
+        this.title = HtmlUtils.htmlUnescape(popupstore.getTitle());
         this.categoryId = popupstore.getCategoryId();
         this.address_short = popupstore.getTopLevelAddress();
         this.address = popupstore.getAddress();
@@ -46,7 +47,7 @@ public class PlaceListFindResponse {
 
     public PlaceListFindResponse(Exhibition exhibition) {
         this.id = exhibition.getSeq();
-        this.title = exhibition.getTitle();
+        this.title = HtmlUtils.htmlUnescape(exhibition.getTitle());
         this.startDate = LocalDate.parse(exhibition.getStartDate()).format(DateTimeFormatter.ofPattern("yy-MM-dd"));
         this.endDate = LocalDate.parse(exhibition.getEndDate()).format(DateTimeFormatter.ofPattern("yy-MM-dd"));
         this.address_short = exhibition.getArea() + " " + exhibition.getPlace();

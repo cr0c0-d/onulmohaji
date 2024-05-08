@@ -46,7 +46,6 @@ public class PopplyService {
         try {
             JsonNode rootNode = mapper.readTree(response);
             JsonNode dataNode = rootNode.path("data");
-
             if (!dataNode.isMissingNode()) { // 'data' 필드가 존재하는지 확인
                 List<PopplyPopupstoreFindResponse> stores = mapper.convertValue(dataNode, new com.fasterxml.jackson.core.type.TypeReference<List<PopplyPopupstoreFindResponse>>() {
                 });

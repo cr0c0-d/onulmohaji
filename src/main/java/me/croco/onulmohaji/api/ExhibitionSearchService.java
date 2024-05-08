@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.domain.Exhibition;
 import me.croco.onulmohaji.service.ExhibitionService;
-import org.apache.tomcat.util.descriptor.web.WebXmlParser;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,14 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import javax.xml.bind.JAXB;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -55,7 +50,7 @@ public class ExhibitionSearchService {
         LocalDate afterOneMonth = today.plusDays(30);
 
         WebClient webClient = getWebClient();
-        String responseBody = webClient.get()
+        String response = webClient.get()
                                 .uri(uriBuilder -> uriBuilder.path(SEARCH_EXHIBITION_URL)
                                         .queryParam("from", URLEncoder.encode(today.format(DateTimeFormatter.ofPattern("yyyyMMdd")), StandardCharsets.UTF_8))
                                         .queryParam("to", URLEncoder.encode(afterOneMonth.format(DateTimeFormatter.ofPattern("yyyyMMdd")), StandardCharsets.UTF_8))
@@ -78,7 +73,7 @@ public class ExhibitionSearchService {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-            JSONObject jsonObject = XML.toJSONObject(responseBody);
+            JSONObject jsonObject = XML.toJSONObject(response);
 
             // JSONObject를 JSON 문자열로 변환
             String jsonStr = jsonObject.toString();
