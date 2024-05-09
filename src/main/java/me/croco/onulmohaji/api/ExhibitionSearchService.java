@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.domain.Exhibition;
+import me.croco.onulmohaji.domain.ExhibitionDetail;
 import me.croco.onulmohaji.service.ExhibitionService;
 import org.json.JSONObject;
 import org.json.XML;
@@ -26,7 +27,11 @@ public class ExhibitionSearchService {
 
     private static final String BASE_URL = "http://www.culture.go.kr";
 
+    // 공연 정보 조회
     private static final String SEARCH_EXHIBITION_URL = "/openapi/rest/publicperformancedisplays/period";
+
+    // 공연 상세 정보 조회
+    private static final String SEARCH_EXHIBITION_DETAIL_URL = "/openapi/rest/publicperformancedisplays/d/";    // ?seq={공연/전시번호}
 
     private final ExhibitionService exhibitionService;
 
@@ -86,9 +91,45 @@ public class ExhibitionSearchService {
                 });
 
                 exhibitionService.saveExhibitionFromSearchResult(exhibitions);
+                getNewExhibitionDetails(exhibitions);   // 세부정보 조회하여 저장
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void getNewExhibitionDetails(List<Exhibition> exhibitionList) {
+        WebClient webClient = getWebClient();
+        ObjectMapper mapper = new ObjectMapper();
+
+        exhibitionList.forEach(exhibition -> {
+            String response = webClient.get()
+                    .uri(uriBuilder -> uriBuilder.path(SEARCH_EXHIBITION_DETAIL_URL)
+                            .queryParam("serviceKey", apiKey)
+                            .queryParam("seq", exhibition.getSeq())
+                            .build()
+                    )
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            try {
+                JSONObject jsonObject = XML.toJSONObject(response);
+
+                // JSONObject를 JSON 문자열로 변환
+                String jsonStr = jsonObject.toString();
+
+                JsonNode rootNode = mapper.readTree(jsonStr);
+                JsonNode bodyNode = rootNode.path("response").path("msgBody").path("perforInfo");
+
+                if (!bodyNode.isMissingNode()) { // 'msgBody' 필드가 존재하는지 확인
+                    ExhibitionDetail exhibitionDetail = mapper.convertValue(bodyNode, ExhibitionDetail.class);
+                    exhibitionService.saveExhibitionDetailFromSearchResult(exhibitionDetail);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
