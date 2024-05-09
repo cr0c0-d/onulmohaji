@@ -3,6 +3,8 @@ package me.croco.onulmohaji.popupstore.service;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.dto.PopplyPopupstoreFindResponse;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
+import me.croco.onulmohaji.popupstore.domain.PopupstoreDetail;
+import me.croco.onulmohaji.popupstore.domain.PopupstoreImage;
 import me.croco.onulmohaji.popupstore.repository.PopupstoreDetailRepository;
 import me.croco.onulmohaji.popupstore.repository.PopupstoreImageRepository;
 import me.croco.onulmohaji.popupstore.repository.PopupstoreRepository;
@@ -31,5 +33,16 @@ public class PopupstoreService {
 
     public List<Popupstore> findPopupstoreListByDate(String date) {
         return popupstoreRepository.findPopupstoreListByDate(LocalDate.parse((CharSequence) date));
+    }
+
+    public Popupstore findPopupstoreById(String id) {
+        return popupstoreRepository.findById(Long.valueOf(id)).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 popupstore id : " + id));
+    }
+    public PopupstoreDetail findPopupstoreDetailById(String id) {
+        return popupstoreDetailRepository.findByStoreId(Long.valueOf(id)).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 popupstore id : " + id));
+    }
+
+    public List<PopupstoreImage> findPopupstoreImagesById(String id) {
+        return popupstoreImageRepository.findByStoreId(Long.valueOf(id));
     }
 }

@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
-import me.croco.onulmohaji.domain.QPopupstore;
+import me.croco.onulmohaji.popupstore.domain.QPopupstore;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

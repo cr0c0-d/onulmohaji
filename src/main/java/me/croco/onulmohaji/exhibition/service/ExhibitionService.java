@@ -43,4 +43,11 @@ public class ExhibitionService {
     public List<Exhibition> findExhibitionListByDate(String date) {
         return exhibitionRepository.findExhibitionListByDate(date);
     }
+
+    public Exhibition findExhibitionById(String id) {
+        return exhibitionRepository.findById(Long.valueOf(id)).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 exhibition id : " + id));
+    }
+    public ExhibitionDetail findExhibitionDetail(String id) {
+        return exhibitionDetailRepository.findById(Long.valueOf(id)).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 exhibition id : " + id));
+    }
 }

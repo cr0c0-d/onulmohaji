@@ -2,11 +2,14 @@ package me.croco.onulmohaji.exhibition.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.PublicExhibitionService;
+import me.croco.onulmohaji.dto.PlaceDetailFindResponse;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
+import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
 import me.croco.onulmohaji.exhibition.service.ExhibitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +36,15 @@ public class ExhibitionController {
         return ResponseEntity.ok()
                 .body(popupstoreListFindResponseList);
 
+    }
+
+    @GetMapping("/api/exhibition/{id}")
+    public ResponseEntity<PlaceDetailFindResponse> findExhibitionDetail(@PathVariable String id) {
+        Exhibition exhibition = exhibitionService.findExhibitionById(id);
+        ExhibitionDetail exhibitionDetail = exhibitionService.findExhibitionDetail(id);
+
+        return ResponseEntity.ok()
+                .body(new PlaceDetailFindResponse(exhibition, exhibitionDetail));
     }
 
 }

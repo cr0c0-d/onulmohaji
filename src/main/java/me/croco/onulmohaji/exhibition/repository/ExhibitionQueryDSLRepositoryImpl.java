@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
-import me.croco.onulmohaji.domain.QExhibition;
+import me.croco.onulmohaji.exhibition.domain.QExhibition;
 
 import java.util.List;
 
