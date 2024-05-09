@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.dto.PopplyPopupstoreFindResponse;
-import me.croco.onulmohaji.service.PopupstoreService;
+import me.croco.onulmohaji.popupstore.service.PopupstoreService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 

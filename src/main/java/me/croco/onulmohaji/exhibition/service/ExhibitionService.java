@@ -1,10 +1,10 @@
-package me.croco.onulmohaji.service;
+package me.croco.onulmohaji.exhibition.service;
 
 import lombok.RequiredArgsConstructor;
-import me.croco.onulmohaji.domain.Exhibition;
-import me.croco.onulmohaji.domain.ExhibitionDetail;
-import me.croco.onulmohaji.repository.ExhibitionDetailRepository;
-import me.croco.onulmohaji.repository.ExhibitionRepository;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
+import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
+import me.croco.onulmohaji.exhibition.repository.ExhibitionDetailRepository;
+import me.croco.onulmohaji.exhibition.repository.ExhibitionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package me.croco.onulmohaji.domain;
+package me.croco.onulmohaji.exhibition.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

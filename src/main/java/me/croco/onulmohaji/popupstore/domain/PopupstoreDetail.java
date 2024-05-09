@@ -1,4 +1,4 @@
-package me.croco.onulmohaji.domain;
+package me.croco.onulmohaji.popupstore.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

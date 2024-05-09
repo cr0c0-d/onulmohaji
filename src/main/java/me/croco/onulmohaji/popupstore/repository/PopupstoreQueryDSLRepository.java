@@ -1,6 +1,6 @@
-package me.croco.onulmohaji.repository;
+package me.croco.onulmohaji.popupstore.repository;
 
-import me.croco.onulmohaji.domain.Popupstore;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -2,8 +2,8 @@ package me.croco.onulmohaji.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.croco.onulmohaji.domain.Exhibition;
-import me.croco.onulmohaji.domain.Popupstore;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import org.springframework.web.util.HtmlUtils;
 
 import java.time.LocalDate;

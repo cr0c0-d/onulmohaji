@@ -1,13 +1,10 @@
-package me.croco.onulmohaji.controller;
+package me.croco.onulmohaji.exhibition.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.croco.onulmohaji.api.ExhibitionSearchService;
-import me.croco.onulmohaji.domain.Exhibition;
-import me.croco.onulmohaji.domain.Popupstore;
-import me.croco.onulmohaji.dto.ExhibitionListFindResponse;
+import me.croco.onulmohaji.api.PublicExhibitionService;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
-import me.croco.onulmohaji.dto.PopupstoreListFindResponse;
-import me.croco.onulmohaji.service.ExhibitionService;
+import me.croco.onulmohaji.exhibition.service.ExhibitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,12 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExhibitionController {
 
-    private final ExhibitionSearchService exhibitionSearchService;
+    private final PublicExhibitionService publicExhibitionService;
     private final ExhibitionService exhibitionService;
 
     @GetMapping("/api/exhibition/new")
     public void searchLocal() {
-        exhibitionSearchService.getNewExhibitions();
+        publicExhibitionService.getNewExhibitions();
     }
 
     @GetMapping("/api/exhibition/list")

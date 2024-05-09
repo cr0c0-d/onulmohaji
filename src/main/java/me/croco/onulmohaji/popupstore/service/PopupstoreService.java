@@ -1,17 +1,15 @@
-package me.croco.onulmohaji.service;
+package me.croco.onulmohaji.popupstore.service;
 
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.dto.PopplyPopupstoreFindResponse;
-import me.croco.onulmohaji.domain.Popupstore;
-import me.croco.onulmohaji.domain.PopupstoreImage;
-import me.croco.onulmohaji.repository.PopupstoreDetailRepository;
-import me.croco.onulmohaji.repository.PopupstoreImageRepository;
-import me.croco.onulmohaji.repository.PopupstoreRepository;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
+import me.croco.onulmohaji.popupstore.repository.PopupstoreDetailRepository;
+import me.croco.onulmohaji.popupstore.repository.PopupstoreImageRepository;
+import me.croco.onulmohaji.popupstore.repository.PopupstoreRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

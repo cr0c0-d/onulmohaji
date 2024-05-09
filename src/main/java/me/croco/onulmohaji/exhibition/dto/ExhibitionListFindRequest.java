@@ -1,4 +1,4 @@
-package me.croco.onulmohaji.dto;
+package me.croco.onulmohaji.exhibition.dto;
 
 import lombok.Getter;
 import lombok.Setter;

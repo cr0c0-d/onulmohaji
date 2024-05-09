@@ -1,11 +1,9 @@
 package me.croco.onulmohaji.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import lombok.*;
-import me.croco.onulmohaji.domain.PopupstoreDetail;
-import me.croco.onulmohaji.domain.PopupstoreImage;
+import me.croco.onulmohaji.popupstore.domain.PopupstoreDetail;
+import me.croco.onulmohaji.popupstore.domain.PopupstoreImage;
 
 import java.util.List;
 

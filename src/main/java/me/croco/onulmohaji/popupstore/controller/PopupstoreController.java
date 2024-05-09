@@ -1,11 +1,10 @@
-package me.croco.onulmohaji.controller;
+package me.croco.onulmohaji.popupstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.PopplyService;
-import me.croco.onulmohaji.domain.Popupstore;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
-import me.croco.onulmohaji.dto.PopupstoreListFindResponse;
-import me.croco.onulmohaji.service.PopupstoreService;
+import me.croco.onulmohaji.popupstore.service.PopupstoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

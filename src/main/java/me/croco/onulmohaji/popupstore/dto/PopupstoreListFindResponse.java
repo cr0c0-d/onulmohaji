@@ -1,10 +1,8 @@
-package me.croco.onulmohaji.dto;
+package me.croco.onulmohaji.popupstore.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-import me.croco.onulmohaji.domain.Popupstore;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
 
 @Setter
 @Getter

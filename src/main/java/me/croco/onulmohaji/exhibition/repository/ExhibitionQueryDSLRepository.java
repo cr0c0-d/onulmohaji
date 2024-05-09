@@ -1,6 +1,6 @@
-package me.croco.onulmohaji.repository;
+package me.croco.onulmohaji.exhibition.repository;
 
-import me.croco.onulmohaji.domain.Exhibition;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
 
 import java.util.List;
 

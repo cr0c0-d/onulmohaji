@@ -3,9 +3,9 @@ package me.croco.onulmohaji.api;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import me.croco.onulmohaji.domain.Exhibition;
-import me.croco.onulmohaji.domain.ExhibitionDetail;
-import me.croco.onulmohaji.service.ExhibitionService;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
+import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
+import me.croco.onulmohaji.exhibition.service.ExhibitionService;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ExhibitionSearchService {
+public class PublicExhibitionService {
 
     private static final String BASE_URL = "http://www.culture.go.kr";
 

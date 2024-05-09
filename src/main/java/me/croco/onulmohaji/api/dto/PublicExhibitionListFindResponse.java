@@ -3,7 +3,7 @@ package me.croco.onulmohaji.api.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
-import me.croco.onulmohaji.domain.Exhibition;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
 
 import java.util.List;
 
