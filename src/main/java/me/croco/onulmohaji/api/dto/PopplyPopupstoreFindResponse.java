@@ -45,9 +45,9 @@ public class PopplyPopupstoreFindResponse {
 
     private String thumbnails;
 
-    private String latitude;
+    private Double latitude;
 
-    private String longitude;
+    private Double longitude;
 
     private String searchItems;
 

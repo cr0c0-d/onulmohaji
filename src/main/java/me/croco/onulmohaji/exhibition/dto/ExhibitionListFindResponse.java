@@ -16,8 +16,8 @@ public class ExhibitionListFindResponse {
     private String realmName;    //	분류명	10	1	연극
     private String area;    //	지역	10	0	서울
     private String thumbnail;   //	썸네일	256	1
-    private String gpsX; //	GPS-X좌표	11	0	129.1013129	경도
-    private String gpsY;    //	GPS-Y좌표	11	0	35.1416412	위도
+    private Double gpsX; //	GPS-X좌표	11	0	129.1013129	경도
+    private Double gpsY;    //	GPS-Y좌표	11	0	35.1416412	위도
 
     public ExhibitionListFindResponse(Exhibition exhibition) {
         this.seq = exhibition.getSeq();

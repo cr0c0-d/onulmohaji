@@ -22,8 +22,8 @@ public class PopupstoreListFindResponse {
     private String preRegisterLink;
     private String hashtag;
     private String thumbnails;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
     private String searchItems;
     private String startDate;
     private String endDate;

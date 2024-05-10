@@ -23,8 +23,8 @@ public class PlaceFindResponse {
     private String preRegisterEndDate;
     private String preRegisterLink;
     private String thumbnails;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
     private String startDate;
     private String endDate;
 

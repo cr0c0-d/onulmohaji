@@ -55,10 +55,10 @@ public class ExhibitionDetail {
     private String phone; //문의처
 
     @Column(name = "gps_x")
-    private String gpsX; //GPS-X좌표 - 예 : 129.1013129
+    private Double gpsX; //GPS-X좌표 - 예 : 129.1013129
 
     @Column(name = "gps_y")
-    private String gpsY; //GPS-Y좌표 - 예 : 35.1416412
+    private Double gpsY; //GPS-Y좌표 - 예 : 35.1416412
 
     @Column(name = "img_url")
     private String imgUrl; //이미지

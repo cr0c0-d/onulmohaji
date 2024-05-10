@@ -62,10 +62,10 @@ public class Popupstore {
     private String thumbnails;
 
     @Column
-    private String latitude;
+    private Double latitude;
 
     @Column
-    private String longitude;
+    private Double longitude;
 
     @Column(name = "search_items")
     private String searchItems;
@@ -99,8 +99,10 @@ public class Popupstore {
         this.preRegisterLink = response.getPreRegisterLink();
         this.hashtag = response.getHashtag();
         this.thumbnails = response.getThumbnails();
-        this.latitude = response.getLatitude();
-        this.longitude = response.getLongitude();
+        // popply 정보가 잘못되어서 위도 경도 바꿔 저장
+        this.latitude = response.getLongitude();
+        this.longitude = response.getLatitude();
+
         this.searchItems = response.getSearchItems();
         this.startDate = response.getStartDate();
         this.endDate = response.getEndDate();

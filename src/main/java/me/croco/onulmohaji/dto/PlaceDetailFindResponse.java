@@ -25,8 +25,8 @@ public class PlaceDetailFindResponse {
     private String contents1;
     private String contents2;
     private String url;
-    private String gpsX;
-    private String gpsY;
+    private Double gpsX;
+    private Double gpsY;
     private List<String> imageList;
     private String address;
 
