@@ -7,6 +7,8 @@ import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
 import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
 import me.croco.onulmohaji.exhibition.service.ExhibitionService;
+import me.croco.onulmohaji.localcode.domain.Localcode;
+import me.croco.onulmohaji.localcode.service.LocalcodeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,7 @@ public class ExhibitionController {
 
     private final PublicExhibitionService publicExhibitionService;
     private final ExhibitionService exhibitionService;
+    private final LocalcodeService localcodeService;
 
     @GetMapping("/api/exhibition/new")
     public void searchLocal() {
@@ -28,8 +31,9 @@ public class ExhibitionController {
     }
 
     @GetMapping("/api/exhibition/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findExhibitionListByDate(@RequestParam String date, @RequestParam int localCode) {
-        List<Exhibition> exhibitionList = exhibitionService.findExhibitionListByDate(date);
+    public ResponseEntity<List<PlaceListFindResponse>> findExhibitionListByDate(@RequestParam String date, @RequestParam Long localcodeId) {
+        Localcode localcode = localcodeService.findById(localcodeId);
+        List<Exhibition> exhibitionList = exhibitionService.findExhibitionListByDate(date, localcode.getLatitude(), localcode.getLongitude());
 
         List<PlaceListFindResponse> popupstoreListFindResponseList = exhibitionList.stream().map(PlaceListFindResponse::new).toList();
         // 거리순으로 정렬하는 로직 추가 필요
