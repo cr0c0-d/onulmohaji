@@ -31,8 +31,8 @@ public class PopupstoreService {
         });
     }
 
-    public List<Popupstore> findPopupstoreListByDate(String date) {
-        return popupstoreRepository.findPopupstoreListByDate(LocalDate.parse((CharSequence) date));
+    public List<Popupstore> findPopupstoreListByDate(String date, Double latitude, Double longtitude) {
+        return popupstoreRepository.findPopupstoreListByDate(LocalDate.parse((CharSequence) date), latitude, longtitude);
     }
 
     public Popupstore findPopupstoreById(String id) {

@@ -6,5 +6,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface PopupstoreQueryDSLRepository {
-    public List<Popupstore> findPopupstoreListByDate(LocalDate date);
+    public List<Popupstore> findPopupstoreListByDate(LocalDate date, Double latitude, Double longtitude);
 }

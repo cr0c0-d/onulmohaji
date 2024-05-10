@@ -5,6 +5,8 @@ import me.croco.onulmohaji.api.PopplyService;
 import me.croco.onulmohaji.dto.PlaceDetailFindResponse;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
+import me.croco.onulmohaji.localcode.domain.Localcode;
+import me.croco.onulmohaji.localcode.service.LocalcodeService;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreDetail;
@@ -24,6 +26,7 @@ public class PopupstoreController {
 
     private final PopplyService popplyService;
     private final PopupstoreService popupstoreService;
+    private final LocalcodeService localcodeService;
 
     /**
      * POPPLY를 통해 새로운 팝업스토어 목록 불러와 저장
@@ -34,8 +37,9 @@ public class PopupstoreController {
     }
 
     @GetMapping("/api/popup/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam int localCode) {
-        List<Popupstore> popupstoreList = popupstoreService.findPopupstoreListByDate(date);
+    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Long localcodeId) {
+        Localcode localcode = localcodeService.findById(localcodeId);
+        List<Popupstore> popupstoreList = popupstoreService.findPopupstoreListByDate(date, localcode.getLatitude(), localcode.getLongitude());
 
         List<PlaceListFindResponse> popupstoreListFindResponseList = popupstoreList.stream().map(PlaceListFindResponse::new).toList();
         // 거리순으로 정렬하는 로직 추가 필요
