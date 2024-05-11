@@ -43,6 +43,6 @@ public class PopupstoreService {
     }
 
     public List<PopupstoreImage> findPopupstoreImagesById(String id) {
-        return popupstoreImageRepository.findByStoreId(Long.valueOf(id));
+        return popupstoreImageRepository.findByStoreIdOrderByStoreImageId(Long.valueOf(id));
     }
 }
