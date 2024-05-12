@@ -39,8 +39,8 @@ public class PlaceDetailFindResponse {
         this.contents1 = detail.getNotice();
         this.contents2 = detail.getContents();
         this.url = detail.getBrandUrl();
-        this.gpsX = popupstore.getLatitude();
-        this.gpsY = popupstore.getLongitude();
+        this.gpsX = popupstore.getLongitude();
+        this.gpsY = popupstore.getLatitude();
         this.imageList = imageList.stream().map(PopupstoreImage::getUrl).toList();
         this.address = popupstore.getAddress();
     }
