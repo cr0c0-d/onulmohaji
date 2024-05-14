@@ -51,6 +51,9 @@ public class Facility {
     @Column(name = "latitude")
     private Double latitude; //  "37.506051888130386"
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
     public Facility(KakaoLocalListFindResponse response) {
         this.id = response.getId();
         this.placeName = response.getPlace_name();

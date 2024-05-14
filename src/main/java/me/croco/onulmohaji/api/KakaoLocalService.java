@@ -23,6 +23,8 @@ public class KakaoLocalService {
     private static final String KAKAO_LOCAL_GET_ADDRESS = "/v2/local/search/address";
     private static final String KAKAO_LOCAL_SEARCH_BY_CATEGORY = "/v2/local/search/category";
 
+    private static final String KAKAO_LOCAL_SEARCH_DETAIL = "https://place.map.kakao.com/main/v/";  // localId
+
     private final FacilityService facilityService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client_id}")
@@ -68,8 +70,8 @@ public class KakaoLocalService {
                                     .queryParam("category_group_code", categoryId)
                                     .queryParam("x", longitude)
                                     .queryParam("y", latitude)
-                                    .queryParam("radius", 20000)
-                                    .queryParam("sort", "distance")
+                                    .queryParam("radius", 1000)
+                                    .queryParam("sort", "accuracy")
                                     .build()
                             )
                             .retrieve()
@@ -84,7 +86,36 @@ public class KakaoLocalService {
                 List<KakaoLocalListFindResponse> facilityList = mapper.convertValue(dataNode, new com.fasterxml.jackson.core.type.TypeReference<List<KakaoLocalListFindResponse>>() {
                 });
                 List<Facility> facilities = facilityList.stream().map(Facility::new).toList();
+
+                facilities.stream().forEach(facility -> {
+                    facility.setThumbnail(getFacilityImage(facility.getId()));
+                });
                 return facilityService.saveAll(facilities);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Facility의 이미지 찾기
+    public String getFacilityImage(Long facilityId) {
+        WebClient webClient = getWebClient();
+
+        String response = webClient.get()
+                .uri(uriBuilder -> uriBuilder.path(KAKAO_LOCAL_SEARCH_BY_CATEGORY.concat(String.valueOf(facilityId)))
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = mapper.readTree(response);
+            JsonNode dataNode = rootNode.path("basicInfo").path("mainphotourl");
+            if (!dataNode.isMissingNode()) { // 'basicInfo.mainphotourl' 필드가 존재하는지 확인
+                return mapper.convertValue(dataNode, String.class);
             }
         } catch (Exception e) {
             e.printStackTrace();
