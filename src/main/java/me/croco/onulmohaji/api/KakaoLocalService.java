@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -87,9 +90,16 @@ public class KakaoLocalService {
                 });
                 List<Facility> facilities = facilityList.stream().map(Facility::new).toList();
 
-                facilities.stream().forEach(facility -> {
-                    facility.setThumbnail(getFacilityImage(facility.getId()));
+                facilities.forEach(facility -> {
+                    Map<String, String> facilityDetail = getFacilityDetail(facility.getId());
+                    facility.setThumbnail(facilityDetail.get("thumbnail"));
+                    facility.setScoresum(Integer.parseInt(facilityDetail.get("scoresum")));
+                    facility.setScorecnt(Integer.parseInt(facilityDetail.get("scorecnt")));
                 });
+
+                facilities = facilities.stream()
+                        .sorted(Comparator.comparingInt(Facility::getScorecnt))
+                        .toList();
                 return facilityService.saveAll(facilities);
             }
         } catch (Exception e) {
@@ -98,14 +108,13 @@ public class KakaoLocalService {
         return null;
     }
 
-    // Facility의 이미지 찾기
-    public String getFacilityImage(Long facilityId) {
-        WebClient webClient = getWebClient();
+    // Facility의 상세정보 조회
+    public Map<String, String> getFacilityDetail(Long facilityId) {
+        Map<String, String> facilityDetail = new HashMap<>();
 
-        String response = webClient.get()
-                .uri(uriBuilder -> uriBuilder.path(KAKAO_LOCAL_SEARCH_BY_CATEGORY.concat(String.valueOf(facilityId)))
-                        .build()
-                )
+        String response = WebClient.create(KAKAO_LOCAL_SEARCH_DETAIL)
+                .get()
+                .uri(String.valueOf(facilityId))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -113,14 +122,18 @@ public class KakaoLocalService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode rootNode = mapper.readTree(response);
-            JsonNode dataNode = rootNode.path("basicInfo").path("mainphotourl");
-            if (!dataNode.isMissingNode()) { // 'basicInfo.mainphotourl' 필드가 존재하는지 확인
-                return mapper.convertValue(dataNode, String.class);
+            JsonNode dataNode = rootNode.path("basicInfo");
+            if (!dataNode.isMissingNode()) { // 'basicInfo' 필드가 존재하는지 확인
+                facilityDetail.put("thumbnail", mapper.convertValue(dataNode.path("mainphotourl"), String.class));
+                int scoresum = mapper.convertValue(dataNode.path("feedback").path("scoresum"), Integer.class);
+                int scorecnt = mapper.convertValue(dataNode.path("feedback").path("scorecnt"), Integer.class);
+                facilityDetail.put("scoresum", String.valueOf(scoresum));
+                facilityDetail.put("scorecnt", String.valueOf(scorecnt));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return facilityDetail;
     }
 
 }

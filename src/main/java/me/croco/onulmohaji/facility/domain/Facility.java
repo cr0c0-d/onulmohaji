@@ -54,6 +54,12 @@ public class Facility {
     @Column(name = "thumbnail")
     private String thumbnail;
 
+    @Column(name = "scoresum")
+    private int scoresum;
+
+    @Column(name = "scorecnt")
+    private int scorecnt;
+
     public Facility(KakaoLocalListFindResponse response) {
         this.id = response.getId();
         this.placeName = response.getPlace_name();
