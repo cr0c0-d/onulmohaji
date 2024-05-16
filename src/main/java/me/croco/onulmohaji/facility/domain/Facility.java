@@ -55,10 +55,10 @@ public class Facility {
     private String thumbnail;
 
     @Column(name = "scoresum")
-    private int scoresum;
+    private Integer scoresum;
 
     @Column(name = "scorecnt")
-    private int scorecnt;
+    private Integer scorecnt;
 
     public Facility(KakaoLocalListFindResponse response) {
         this.id = response.getId();

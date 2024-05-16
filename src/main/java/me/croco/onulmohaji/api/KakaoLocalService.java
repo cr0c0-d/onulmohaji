@@ -93,12 +93,14 @@ public class KakaoLocalService {
                 facilities.forEach(facility -> {
                     Map<String, String> facilityDetail = getFacilityDetail(facility.getId());
                     facility.setThumbnail(facilityDetail.get("thumbnail"));
-                    facility.setScoresum(Integer.parseInt(facilityDetail.get("scoresum")));
-                    facility.setScorecnt(Integer.parseInt(facilityDetail.get("scorecnt")));
+                    int scoresum = facilityDetail.get("scoresum").equals("null") ? 0 : Integer.parseInt(facilityDetail.get("scoresum"));
+                    int scorecnt = facilityDetail.get("scorecnt").equals("null") ? 0 : Integer.parseInt(facilityDetail.get("scorecnt"));
+                    facility.setScoresum(scoresum);
+                    facility.setScorecnt(scorecnt);
                 });
 
                 facilities = facilities.stream()
-                        .sorted(Comparator.comparingInt(Facility::getScorecnt))
+                        .sorted(Comparator.comparing(Facility::getScorecnt).reversed())
                         .toList();
                 return facilityService.saveAll(facilities);
             }
