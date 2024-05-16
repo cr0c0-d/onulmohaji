@@ -17,7 +17,7 @@ public class LocalcodeQueryDSLRepositoryImpl implements LocalcodeQueryDSLReposit
     @Override
     public List<Localcode> findLocalcodeList() {
         return jpaQueryFactory.selectFrom(qLocalcode)
-                .orderBy(qLocalcode.id.asc())
+                .orderBy(qLocalcode.name.asc())
                 .fetch();
     }
 }
