@@ -42,6 +42,7 @@ public class MemberService implements UserDetailsService {
                                 .email(request.getEmail())
                                 .nickname(request.getNickname())
                                 .password(bCryptPasswordEncoder.encode(request.getPassword()))
+                                .localcodeId(request.getLocalcodeId())
                                 .authorities(Authorities.ROLE_USER)
                                 .build()
                 )

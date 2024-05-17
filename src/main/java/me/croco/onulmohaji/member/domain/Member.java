@@ -39,12 +39,12 @@ public class Member implements UserDetails {
     @Column(name = "localcode_id")
     private Long localcodeId;
 
+    @Enumerated(EnumType.STRING)
+    private Authorities authorities;
+
     @CreatedDate
     @Column(name="created_at")
     private LocalDateTime createdAt;
-
-    @Enumerated(EnumType.STRING)
-    private Authorities authorities;
 
     @Builder
     public Member(String email, String nickname, String password, Long localcodeId, Authorities authorities) {
