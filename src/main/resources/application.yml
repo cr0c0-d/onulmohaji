@@ -69,3 +69,6 @@ apiKey:
 jwt:
   issuer: cr0c0
   secret_key: ENC(vi3kSQ7TM6Tq39ehZmX2zP7AxG2LL0Z3IfYKwzmPNq+0ri5gTErbXslQh73wRCdn)
+
+default:
+  profileImg: https://i.ibb.co/LzfM6Mx/member1712982423627.jpg
