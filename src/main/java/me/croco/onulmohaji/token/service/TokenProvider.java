@@ -1,4 +1,4 @@
-package me.croco.onulmohaji.util;
+package me.croco.onulmohaji.token.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -68,9 +68,9 @@ public class TokenProvider {
     }
 
     // 토큰 기반 유저 id 가져오기
-    public String getUserId(String token) {
+    public Long getUserId(String token) {
         Claims claims = getClaims(token);
-        return claims.get("id", String.class);
+        return claims.get("id", Long.class);
     }
 
     // 클레임 정보 가져오기
