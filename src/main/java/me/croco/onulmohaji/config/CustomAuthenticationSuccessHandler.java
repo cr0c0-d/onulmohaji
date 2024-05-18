@@ -75,6 +75,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
             userMap.put("accessToken", accessToken);
             userMap.put("nickname", member.getNickname()); // 닉네임
+            userMap.put("localcode", member.getLocalcodeId()); // 지역코드
             userMap.put("id", "" + member.getId()); // Long 타입 아이디
             userMap.put("role", member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0)); // 권한
 
