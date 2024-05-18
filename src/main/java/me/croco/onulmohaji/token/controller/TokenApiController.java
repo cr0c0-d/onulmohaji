@@ -22,10 +22,15 @@ public class TokenApiController {
     @PostMapping("/api/token")
     public ResponseEntity<AccessTokenCreateResponse> createNewAccessToken(HttpServletRequest request) {
         String refresh_token = CookieUtil.getCookie(CustomAuthenticationSuccessHandler.REFRESH_TOKEN_COOKIE_NAME, request);
-        String newAccessToken = tokenService.createNewAccessToken(refresh_token);
+        try {
+            String newAccessToken = tokenService.createNewAccessToken(refresh_token);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new AccessTokenCreateResponse(newAccessToken));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new AccessTokenCreateResponse(newAccessToken));
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("/api/token/{accessToken}")
