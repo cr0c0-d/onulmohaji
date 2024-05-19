@@ -1,10 +1,7 @@
 package me.croco.onulmohaji.route.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -12,6 +9,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Route {
     @Id
@@ -23,7 +21,7 @@ public class Route {
     private Long userId;
 
     @Column(name = "route_date")
-    private LocalDate routeDate;
+    private String routeDate;
 
     @Column(name = "like_cnt")
     private int likeCnt;
@@ -33,6 +31,7 @@ public class Route {
 
     @Column
     private int valid;
+
 
 
 }

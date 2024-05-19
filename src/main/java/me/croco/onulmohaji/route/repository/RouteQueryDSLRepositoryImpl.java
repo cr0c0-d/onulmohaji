@@ -21,12 +21,11 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
 
 
     @Override
-    public Optional<Long> findRouteIdByDateAndUserId(String date, Long userId) throws IllegalArgumentException {
+    public Optional<Route> findRouteByDateAndUserId(String date, Long userId) throws IllegalArgumentException {
 
         return Optional.ofNullable(
-                jpaQueryFactory.select(qRoute.id)
-                        .from(qRoute)
-                        .where(qRoute.routeDate.eq(LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                jpaQueryFactory.selectFrom(qRoute)
+                        .where(qRoute.routeDate.eq(date)
                             .and(qRoute.userId.eq(userId)
                         )
                 )
@@ -42,40 +41,5 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
                         .where(qRouteDetail.routeId.eq(routeId))
                 .fetchOne()
         );
-    }
-
-    @Override
-    public Long addRouteDetail(RouteDetailAddRequest request, Member member) {
-        Route route = jpaQueryFactory.selectFrom(qRoute)
-                .where(qRoute.routeDate.eq(LocalDate.parse(request.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        .and(
-                                qRoute.userId.eq(member.getId())
-                        )
-
-                ).fetchOne();
-        Long routeId;
-        Integer maxOrder = 1;
-
-        if (route == null) {
-            routeId = jpaQueryFactory.insert(qRoute)
-                    .columns(qRoute.routeDate, qRoute.userId, qRoute.likeCnt, qRoute.shareType, qRoute.valid)
-                    .values(LocalDate.parse(request.getDate()), member.getId(), 0, 0, 1)
-                    .execute();
-        } else {
-            routeId = route.getId();
-
-            maxOrder = jpaQueryFactory.select(qRouteDetail.orderNo.max())
-                    .where(qRouteDetail.routeId.eq(routeId))
-                    .fetchOne();
-
-            if(maxOrder == null) {
-                maxOrder = 1;
-            }
-        }
-
-        return jpaQueryFactory.insert(qRouteDetail)
-                .columns(qRouteDetail.routeId, qRouteDetail.orderNo, qRouteDetail.placeId, qRouteDetail.placeType)
-                .values(routeId, maxOrder, request.getPlaceId(), request.getPlaceType())
-                .execute();
     }
 }

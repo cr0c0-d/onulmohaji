@@ -1,15 +1,13 @@
 package me.croco.onulmohaji.route.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class RouteDetail {
     @Id
