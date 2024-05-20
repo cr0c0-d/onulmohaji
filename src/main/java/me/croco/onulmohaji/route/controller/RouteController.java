@@ -30,7 +30,7 @@ public class RouteController {
     public ResponseEntity<RouteFindResponse> findRoute(@RequestParam Long userId, @RequestParam String date, HttpServletRequest request) {
         try {
             Route route = routeService.findRoute(userId, date, request);
-            List<RouteDetail> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
+            List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
 
             return ResponseEntity.ok()
                     .body(new RouteFindResponse(route, routeDetailList));

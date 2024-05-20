@@ -26,13 +26,13 @@ public class RouteFindResponse {
 
     private List<RouteDetailFindResponse> routeDetailList;
 
-    public RouteFindResponse(Route route, List<RouteDetail> routeDetailList) {
+    public RouteFindResponse(Route route, List<RouteDetailFindResponse> routeDetailList) {
         this.routeId = route.getId();
         this.userId = route.getUserId();
         this.routeDate = route.getRouteDate();
         this.likeCnt = route.getLikeCnt();
         this.shareType = route.getShareType();
         this.valid = route.getValid();
-        this.routeDetailList = routeDetailList.stream().map(RouteDetailFindResponse::new).toList();
+        this.routeDetailList = routeDetailList;
     }
 }
