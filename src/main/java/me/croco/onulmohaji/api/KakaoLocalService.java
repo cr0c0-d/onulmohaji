@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +24,8 @@ public class KakaoLocalService {
     private static final String KAKAO_LOCAL_SEARCH_BY_CATEGORY = "/v2/local/search/category";
 
     private static final String KAKAO_LOCAL_SEARCH_DETAIL = "https://place.map.kakao.com/main/v/";  // localId
+
+    private static final String KAKAO_LOCAL_TRANSCOORD = "/v2/local/geo/transcoord.json";
 
     private final FacilityService facilityService;
 
@@ -97,6 +96,8 @@ public class KakaoLocalService {
                     int scorecnt = facilityDetail.get("scorecnt").equals("null") ? 0 : Integer.parseInt(facilityDetail.get("scorecnt"));
                     facility.setScoresum(scoresum);
                     facility.setScorecnt(scorecnt);
+                    facility.setWpointx(Long.parseLong(facilityDetail.get("wpointx")));
+                    facility.setWpointy(Long.parseLong(facilityDetail.get("wpointy")));
                 });
 
                 facilities = facilities.stream()
@@ -131,11 +132,40 @@ public class KakaoLocalService {
                 int scorecnt = mapper.convertValue(dataNode.path("feedback").path("scorecnt"), Integer.class);
                 facilityDetail.put("scoresum", String.valueOf(scoresum));
                 facilityDetail.put("scorecnt", String.valueOf(scorecnt));
+                facilityDetail.put("wpointx", mapper.convertValue(dataNode.path("wpointx"), String.class));
+                facilityDetail.put("wpointy", mapper.convertValue(dataNode.path("wpointy"), String.class));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return facilityDetail;
+    }
+
+    public List<Long> getTranscoord(Double longitude, Double latitude) {
+        List<Long> list = new ArrayList<>();
+
+        WebClient webClient = getWebClient();
+        String response = webClient.get()
+                .uri(uriBuilder -> uriBuilder.path(KAKAO_LOCAL_TRANSCOORD)
+                        .queryParam("x", longitude)
+                        .queryParam("y", latitude)
+                        .queryParam("output_coord","WCONGNAMUL")
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = mapper.readTree(response);
+            list.add(Long.parseLong(mapper.convertValue(rootNode.path("x"),String.class)));
+            list.add(Long.parseLong(mapper.convertValue(rootNode.path("y"), String.class)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
 }
