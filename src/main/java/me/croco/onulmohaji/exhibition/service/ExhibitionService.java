@@ -26,6 +26,8 @@ public class ExhibitionService {
 
             exhibition.setStartDate(LocalDate.parse(exhibition.getStartDate(), before).format(after));
             exhibition.setEndDate(LocalDate.parse(exhibition.getEndDate(), before).format(after));
+
+            exhibition.setTitle(HtmlUtils.htmlUnescape(exhibition.getTitle()));
         });
         exhibitionRepository.saveAll(exhibitionList);
     }
@@ -37,6 +39,10 @@ public class ExhibitionService {
 
         exhibitionDetail.setStartDate(LocalDate.parse(exhibitionDetail.getStartDate(), before).format(after));
         exhibitionDetail.setEndDate(LocalDate.parse(exhibitionDetail.getEndDate(), before).format(after));
+
+        exhibitionDetail.setTitle(HtmlUtils.htmlUnescape(exhibitionDetail.getTitle()));
+        exhibitionDetail.setSubTitle(HtmlUtils.htmlUnescape(exhibitionDetail.getSubTitle()));
+
         exhibitionDetailRepository.save(exhibitionDetail);
     }
 
