@@ -1,11 +1,13 @@
 package me.croco.onulmohaji.exhibition.service;
 
 import lombok.RequiredArgsConstructor;
+import me.croco.onulmohaji.api.KakaoLocalService;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
 import me.croco.onulmohaji.exhibition.repository.ExhibitionDetailRepository;
 import me.croco.onulmohaji.exhibition.repository.ExhibitionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +20,8 @@ public class ExhibitionService {
     private final ExhibitionRepository exhibitionRepository;
     private final ExhibitionDetailRepository exhibitionDetailRepository;
 
+    private final KakaoLocalService kakaoLocalService;
+
     public void saveExhibitionFromSearchResult(List<Exhibition> exhibitionList) {
         exhibitionList.forEach(exhibition -> {
             // yyyyMMdd 형식 문자열 -> yyyy-MM-dd 형식으로 바꿔 저장
@@ -28,6 +32,10 @@ public class ExhibitionService {
             exhibition.setEndDate(LocalDate.parse(exhibition.getEndDate(), before).format(after));
 
             exhibition.setTitle(HtmlUtils.htmlUnescape(exhibition.getTitle()));
+
+            List<Long> wpointlist = kakaoLocalService.getTranscoord(exhibition.getGpsX(), exhibition.getGpsY());
+            exhibition.setWpointx(wpointlist.get(0));
+            exhibition.setWpointy(wpointlist.get(1));
         });
         exhibitionRepository.saveAll(exhibitionList);
     }

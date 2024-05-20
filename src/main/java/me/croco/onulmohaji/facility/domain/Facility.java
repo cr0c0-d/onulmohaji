@@ -60,6 +60,13 @@ public class Facility {
     @Column(name = "scorecnt")
     private Integer scorecnt;
 
+    @Column(name = "wpointx")
+    private Long wpointx;
+
+    @Column(name = "wpointy")
+    private Long wpointy;
+
+
     public Facility(KakaoLocalListFindResponse response) {
         this.id = response.getId();
         this.placeName = response.getPlace_name();

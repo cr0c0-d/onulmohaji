@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import me.croco.onulmohaji.api.dto.PopplyPopupstoreFindResponse;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -81,6 +83,12 @@ public class Popupstore {
 
     @Column
     private String status;
+
+    @Column(name = "wpointx")
+    private Long wpointx;
+
+    @Column(name = "wpointy")
+    private Long wpointy;
 
     @Builder
     public Popupstore(PopplyPopupstoreFindResponse response) {

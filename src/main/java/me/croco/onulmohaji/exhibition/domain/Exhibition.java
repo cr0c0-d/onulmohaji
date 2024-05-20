@@ -43,4 +43,11 @@ public class Exhibition {
 
     @Column(name = "gps_y")
     private Double gpsY;    //	GPS-Y좌표	11	0	35.1416412	위도
+
+    @Column(name = "wpointx")
+    private Long wpointx;
+
+    @Column(name = "wpointy")
+    private Long wpointy;
+
 }

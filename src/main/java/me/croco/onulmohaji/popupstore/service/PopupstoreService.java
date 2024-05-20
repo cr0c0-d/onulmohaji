@@ -1,6 +1,7 @@
 package me.croco.onulmohaji.popupstore.service;
 
 import lombok.RequiredArgsConstructor;
+import me.croco.onulmohaji.api.KakaoLocalService;
 import me.croco.onulmohaji.api.dto.PopplyPopupstoreFindResponse;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreDetail;
@@ -20,11 +21,18 @@ public class PopupstoreService {
     private final PopupstoreRepository popupstoreRepository;
     private final PopupstoreDetailRepository popupstoreDetailRepository;
     private final PopupstoreImageRepository popupstoreImageRepository;
+    private final KakaoLocalService kakaoLocalService;
 
     // 팝업스토어 저장
     public void savePopupstoreInfo(List<PopplyPopupstoreFindResponse> storeList) {
         storeList.forEach(response -> {
             Popupstore popupstore = new Popupstore(response);
+
+            //wpointx, y,를 구해 저장하는 과정
+            List<Long> wpointlist = kakaoLocalService.getTranscoord(popupstore.getLongitude(), popupstore.getLatitude());
+            popupstore.setWpointx(wpointlist.get(0));
+            popupstore.setWpointy(wpointlist.get(1));
+
             popupstoreRepository.save(popupstore);
             popupstoreDetailRepository.save(response.getStoreDetail());
             response.getStoreImage().forEach(popupstoreImageRepository::save);
