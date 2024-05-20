@@ -6,8 +6,7 @@ import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.repository.MemberRepository;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.domain.RouteDetail;
-import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
-import me.croco.onulmohaji.route.dto.RouteFindRequest;
+import me.croco.onulmohaji.route.dto.*;
 import me.croco.onulmohaji.route.repository.RouteDetailRepository;
 import me.croco.onulmohaji.route.repository.RouteRepository;
 import me.croco.onulmohaji.util.Authorities;
@@ -32,6 +31,9 @@ public class RouteService {
     private final RouteDetailRepository routeDetailRepository;
     private final HttpHeaderChecker httpHeaderChecker;
     private final MemberRepository memberRepository;
+    private final ExhibitionRepository exhibitionRepository;
+    private final PopupstoreRepository popupstoreRepository;
+    private final FacilityRepository facilityRepository;
 
     public Long addRouteDetail(RouteDetailAddRequest addRequest, HttpServletRequest request) {
         Member loginMember = getLoginMember(request);
@@ -83,9 +85,22 @@ public class RouteService {
         return route;
     }
 
-    public List<RouteDetail> findRouteDetailListByRouteId(Long routeId) {
-        return routeDetailRepository.findByRouteIdOrderByOrderNo(routeId);
+    public List<RouteDetailFindResponse> findRouteDetailListByRouteId(Long routeId) {
+        List<RouteDetail> routeDetailList = routeDetailRepository.findByRouteIdOrderByOrderNo(routeId);
+        return routeDetailList.stream().map(routeDetail -> {
+            switch (routeDetail.getPlaceType()) {
+                case "exhibition" :
+                    return new RouteDetailFindResponse(routeDetail, exhibitionRepository.findById(routeDetail.getPlaceId()).get());
+
+                case "popup" :
+                    return new RouteDetailFindResponse(routeDetail, popupstoreRepository.findById(routeDetail.getPlaceId()).get());
+
+                default:
+                    return new RouteDetailFindResponse(routeDetail, facilityRepository.findById(routeDetail.getPlaceId()).get());
+            }
+        }).toList();
     }
+
     public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
         routeRepository.updateRouteDetailOrder(routeDetailUpdateRequests);
     }
