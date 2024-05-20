@@ -26,7 +26,9 @@ public class RouteFindResponse {
 
     private List<RouteDetailFindResponse> routeDetailList;
 
-    public RouteFindResponse(Route route, List<RouteDetailFindResponse> routeDetailList) {
+    private List<String> routeMapUrlList;
+
+    public RouteFindResponse(Route route, List<RouteDetailFindResponse> routeDetailList, List<String> routeMapUrlList) {
         this.routeId = route.getId();
         this.userId = route.getUserId();
         this.routeDate = route.getRouteDate();
@@ -34,5 +36,6 @@ public class RouteFindResponse {
         this.shareType = route.getShareType();
         this.valid = route.getValid();
         this.routeDetailList = routeDetailList;
+        this.routeMapUrlList = routeMapUrlList;
     }
 }

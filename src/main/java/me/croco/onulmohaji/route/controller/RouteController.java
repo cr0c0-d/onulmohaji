@@ -2,16 +2,26 @@ package me.croco.onulmohaji.route.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
+import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
+import me.croco.onulmohaji.exhibition.repository.ExhibitionDetailRepository;
+import me.croco.onulmohaji.exhibition.repository.ExhibitionRepository;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
+import me.croco.onulmohaji.popupstore.repository.PopupstoreRepository;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.domain.RouteDetail;
 import me.croco.onulmohaji.route.dto.*;
 import me.croco.onulmohaji.route.service.RouteService;
 import me.croco.onulmohaji.util.JsoupCrawling;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -31,9 +41,9 @@ public class RouteController {
         try {
             Route route = routeService.findRoute(userId, date, request);
             List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
-
+            List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
             return ResponseEntity.ok()
-                    .body(new RouteFindResponse(route, routeDetailList));
+                    .body(new RouteFindResponse(route, routeDetailList, routeMapUrlList));
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

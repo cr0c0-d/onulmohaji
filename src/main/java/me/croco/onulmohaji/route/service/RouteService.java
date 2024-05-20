@@ -101,6 +101,21 @@ public class RouteService {
         }).toList();
     }
 
+    public List<String> getRouteMapUrlList(List<RouteDetailFindResponse> routeDetailList) {
+        List<String> urlList = new ArrayList<>();
+
+        for (int i = 0 ; i < routeDetailList.size() - 1; i++) {
+            RouteDetailFindResponse thisRoute = routeDetailList.get(i);
+            RouteDetailFindResponse nextRoute = routeDetailList.get(i+1);
+            urlList.add("https://map.kakao.com/?map_type=TYPE_MAP&target=walk&rt=" +
+                    thisRoute.getWpointx()+","+thisRoute.getWpointy()+","+nextRoute.getWpointx()+","+nextRoute.getWpointy()+
+                    "&rt1="+thisRoute.getPlaceName().replace(" ", "+") +
+                    "&rt2=" + nextRoute.getPlaceName().replace(" ", "+"));
+
+        }
+        return urlList;
+    }
+
     public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
         routeRepository.updateRouteDetailOrder(routeDetailUpdateRequests);
     }
