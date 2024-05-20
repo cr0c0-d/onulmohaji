@@ -102,8 +102,8 @@ public class Popupstore {
         this.topLevelAddress = response.getTopLevelAddress();
         this.address = response.getAddress();
         this.preRegister = response.isPreRegister();
-        this.preRegisterStartDate = response.getPreRegisterStartDate();
-        this.preRegisterEndDate = response.getPreRegisterEndDate();
+        this.preRegisterStartDate = response.getPreRegisterStartDate().substring(0, 10);
+        this.preRegisterEndDate = response.getPreRegisterEndDate().substring(0, 10);
         this.preRegisterLink = response.getPreRegisterLink();
         this.hashtag = response.getHashtag();
         this.thumbnails = response.getThumbnails();
@@ -112,8 +112,8 @@ public class Popupstore {
         this.longitude = response.getLatitude();
 
         this.searchItems = response.getSearchItems();
-        this.startDate = response.getStartDate();
-        this.endDate = response.getEndDate();
+        this.startDate = response.getStartDate().substring(0, 10);
+        this.endDate = response.getEndDate().substring(0, 10);
         this.workingTime = response.getWorkingTime();
         this.status = response.getStatus();
     }
