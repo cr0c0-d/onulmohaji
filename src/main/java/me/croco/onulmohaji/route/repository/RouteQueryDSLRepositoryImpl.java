@@ -7,9 +7,12 @@ import me.croco.onulmohaji.route.domain.QRoute;
 import me.croco.onulmohaji.route.domain.QRouteDetail;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
+import me.croco.onulmohaji.route.dto.RouteDetailUpdateRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -42,4 +45,17 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
                 .fetchOne()
         );
     }
+
+    @Override
+    @Transactional
+    public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
+        routeDetailUpdateRequests.forEach(routeDetailUpdateRequest -> {
+            jpaQueryFactory.update(qRouteDetail)
+                    .set(qRouteDetail.orderNo, routeDetailUpdateRequest.getOrderNo())
+                    .where(qRouteDetail.id.eq(routeDetailUpdateRequest.getId()))
+                    .execute();
+        });
+    }
+
+
 }

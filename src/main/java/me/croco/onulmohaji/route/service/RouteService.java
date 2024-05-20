@@ -86,6 +86,9 @@ public class RouteService {
     public List<RouteDetail> findRouteDetailListByRouteId(Long routeId) {
         return routeDetailRepository.findByRouteIdOrderByOrderNo(routeId);
     }
+    public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
+        routeRepository.updateRouteDetailOrder(routeDetailUpdateRequests);
+    }
     public Member getLoginMember(HttpServletRequest request) {
         // 로그인 상태인지 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

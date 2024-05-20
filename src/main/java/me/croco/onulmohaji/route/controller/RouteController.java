@@ -4,9 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.domain.RouteDetail;
-import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
-import me.croco.onulmohaji.route.dto.RouteFindRequest;
-import me.croco.onulmohaji.route.dto.RouteFindResponse;
+import me.croco.onulmohaji.route.dto.*;
 import me.croco.onulmohaji.route.service.RouteService;
 import me.croco.onulmohaji.util.JsoupCrawling;
 import org.springframework.http.HttpStatus;
@@ -41,10 +39,9 @@ public class RouteController {
         }
     }
 
-    @GetMapping("/test/crawling")
-    public void test() {
-        JsoupCrawling jsoupCrawling = new JsoupCrawling();
-        jsoupCrawling.crawlingRoute();
+    @PutMapping("/api/route")
+    public void updateRouteDetailOrder(@RequestBody List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
+        routeService.updateRouteDetailOrder(routeDetailUpdateRequests);
     }
 
 }
