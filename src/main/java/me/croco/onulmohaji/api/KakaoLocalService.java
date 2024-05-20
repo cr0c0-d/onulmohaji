@@ -159,8 +159,9 @@ public class KakaoLocalService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode rootNode = mapper.readTree(response);
-            list.add(Long.parseLong(mapper.convertValue(rootNode.path("x"),String.class)));
-            list.add(Long.parseLong(mapper.convertValue(rootNode.path("y"), String.class)));
+            JsonNode dataNode = rootNode.path("documents").get(0);
+            list.add((mapper.convertValue(dataNode.path("x"), Double.class).longValue()));
+            list.add((mapper.convertValue(dataNode.path("y"), Double.class).longValue()));
         } catch (Exception e) {
             e.printStackTrace();
         }
