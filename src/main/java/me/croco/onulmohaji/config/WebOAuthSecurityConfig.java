@@ -60,7 +60,9 @@ public class WebOAuthSecurityConfig {
                                         "/api/popup/**",   // 팝업스토어 하위
                                         "/api/exhibition",   // 전시회
                                         "/api/exhibition/**",   // 전시회 하위
-                                        "api/localcode" // 지역코드 조회
+                                        "/api/localcode", // 지역코드 조회
+                                        "/api/facility",    // 시설
+                                        "/api/facility/**"  // 시설 하위
                                 ).permitAll()
 
                                 .requestMatchers(
