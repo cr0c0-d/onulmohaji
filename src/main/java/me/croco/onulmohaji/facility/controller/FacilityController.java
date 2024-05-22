@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +27,17 @@ public class FacilityController {
         List<Facility> facilityList = kakaoLocalService.getLocalListByCategory(categoryId, latitude, longitude);
         return ResponseEntity.ok()
                 .body(facilityList);
+    }
+    @GetMapping("/api/facility/list")
+    public ResponseEntity<Map<String, List<Facility>>> findFacilityList(@RequestParam Double latitude, @RequestParam Double longitude) {
+        Map<String, List<Facility>> map = new HashMap<>();
+
+        String[] codeArr = {"FD6", "CE7", "CT1", "AT4", "PK6"};
+        for(String code : codeArr) {
+            map.put(code, kakaoLocalService.getLocalListByCategory(code, latitude, longitude));
+        }
+        return ResponseEntity.ok()
+                .body(map);
     }
 
 }
