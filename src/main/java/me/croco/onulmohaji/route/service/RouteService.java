@@ -119,6 +119,20 @@ public class RouteService {
     public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
         routeRepository.updateRouteDetailOrder(routeDetailUpdateRequests);
     }
+    public void deleteRouteDetail(Long routeDetailId) {
+        RouteDetail routeDetail = routeDetailRepository.findById(routeDetailId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 routeDetail"));
+        routeDetailRepository.deleteById(routeDetailId);
+        List<RouteDetail> routeDetailList = routeDetailRepository.findByRouteIdOrderByOrderNo(routeDetail.getRouteId());
+        if(routeDetailList == null || routeDetailList.isEmpty()) {
+            routeRepository.deleteById(routeDetail.getRouteId());
+        } else {
+            AtomicInteger index = new AtomicInteger(1);
+            routeDetailList.forEach(detail -> {
+                detail.setOrderNo(index.getAndIncrement());
+            });
+            routeDetailRepository.saveAll(routeDetailList);
+        }
+    }
     public Member getLoginMember(HttpServletRequest request) {
         // 로그인 상태인지 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

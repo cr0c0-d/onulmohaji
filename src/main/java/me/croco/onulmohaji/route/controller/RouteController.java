@@ -54,4 +54,8 @@ public class RouteController {
         routeService.updateRouteDetailOrder(routeDetailUpdateRequests);
     }
 
+    @DeleteMapping("/api/routeDetail/{routeDetailId}")
+    public void deleteRouteDetail(@PathVariable Long routeDetailId) {
+        routeService.deleteRouteDetail(routeDetailId);
+    }
 }
