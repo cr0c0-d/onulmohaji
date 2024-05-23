@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -59,6 +61,25 @@ public class NaverService {
 
         return response;
     }
+
+    public String getNaverLoginRequestUrl(String state) {
+        Map<String, String> params = new HashMap<>();
+        params.put("client_id", naverClientId);
+        params.put("response_type", "code");
+        params.put("redirect_uri", "http://25.10.86.27:3000/login/auth/naver/callback");
+        params.put("state", state);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("https://nid.naver.com/oauth2.0/authorize");
+        builder.append("?");
+        params.keySet().forEach(key -> {
+            builder.append(key);
+            builder.append("=");
+            builder.append(params.get(key));
+            builder.append("&");
+        });
+        builder.deleteCharAt(builder.length()-1);
+        return builder.toString();
 
     private WebClient getNaverApiWebClient() {
         return WebClient.builder()
