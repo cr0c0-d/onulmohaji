@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.exhibition.domain.QExhibition;
+import me.croco.onulmohaji.exhibition.domain.QExhibitionDetail;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class ExhibitionQueryDSLRepositoryImpl implements ExhibitionQueryDSLRepos
     private final JPAQueryFactory jpaQueryFactory;
 
     private final QExhibition qExhibition = QExhibition.exhibition;
+    private final QExhibitionDetail qExhibitionDetail = QExhibitionDetail.exhibitionDetail;
 
     // 주어진 위도,경도 좌표에서부터 거리를 구함
     private NumberTemplate<Double> haversineFormula(Double latitude, Double longitude) {
@@ -34,4 +36,27 @@ public class ExhibitionQueryDSLRepositoryImpl implements ExhibitionQueryDSLRepos
                 .orderBy(haversineFormula(latitude, longitude).asc())
                 .fetch();
     }
+
+    @Override
+    public List<Exhibition> findExhibitionListByDateAndKeyword(String keyword, String date, Double latitude, Double longitude) {
+        BooleanExpression isBefore = qExhibition.startDate.lt(date);
+        BooleanExpression isAfter = qExhibition.endDate.gt(date);
+
+        return jpaQueryFactory.selectFrom(qExhibition)
+                .where(isBefore.and(isAfter)
+                        .and(
+                                qExhibition.title.contains(keyword)
+                                        .or(qExhibition.place.contains(keyword))
+                                        .or(qExhibitionDetail.contents1.contains(keyword))
+                                        .or(qExhibitionDetail.contents2.contains(keyword))
+                        )
+
+                )
+                .join(qExhibitionDetail)
+                .on(qExhibition.seq.eq(qExhibitionDetail.seq))
+                .orderBy(haversineFormula(latitude, longitude).asc())
+                .fetch();
+    }
+
+
 }

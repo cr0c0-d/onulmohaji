@@ -9,6 +9,7 @@ import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
 import me.croco.onulmohaji.exhibition.service.ExhibitionService;
 import me.croco.onulmohaji.localcode.domain.Localcode;
 import me.croco.onulmohaji.localcode.service.LocalcodeService;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,12 +32,14 @@ public class ExhibitionController {
     }
 
     @GetMapping("/api/exhibition/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findExhibitionListByDate(@RequestParam String date, @RequestParam Long localcodeId) {
+    public ResponseEntity<List<PlaceListFindResponse>> findExhibitionListByDate(@RequestParam String date, @RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
         Localcode localcode = localcodeService.findById(localcodeId);
-        List<Exhibition> exhibitionList = exhibitionService.findExhibitionListByDate(date, localcode.getLatitude(), localcode.getLongitude());
+
+        List<Exhibition> exhibitionList = keyword == null ? exhibitionService.findExhibitionListByDate(date, localcode.getLatitude(), localcode.getLongitude())
+                : exhibitionService.findExhibitionListByDateAndKeyword(keyword, date, localcode.getLatitude(), localcode.getLongitude());
 
         List<PlaceListFindResponse> popupstoreListFindResponseList = exhibitionList.stream().map(PlaceListFindResponse::new).toList();
-        // 거리순으로 정렬하는 로직 추가 필요
+
         return ResponseEntity.ok()
                 .body(popupstoreListFindResponseList);
 

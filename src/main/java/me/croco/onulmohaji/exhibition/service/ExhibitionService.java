@@ -58,6 +58,10 @@ public class ExhibitionService {
         return exhibitionRepository.findExhibitionListByDate(date, latitude, longitude);
     }
 
+    public List<Exhibition> findExhibitionListByDateAndKeyword(String keyword, String date, Double latitude, Double longitude) {
+        return exhibitionRepository.findExhibitionListByDateAndKeyword(keyword, date, latitude, longitude);
+    }
+
     public Exhibition findExhibitionById(String id) {
         return exhibitionRepository.findById(Long.valueOf(id)).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 exhibition id : " + id));
     }
