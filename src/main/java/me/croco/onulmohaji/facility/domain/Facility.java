@@ -54,6 +54,9 @@ public class Facility {
     @Column(name = "thumbnail")
     private String thumbnail;
 
+    @Column(name = "tags")
+    private String tags;
+
     @Column(name = "scoresum")
     private Integer scoresum;
 

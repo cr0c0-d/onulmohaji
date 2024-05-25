@@ -16,4 +16,8 @@ public class FacilityService {
     public List<Facility> saveAll(List<Facility> facilityList) {
         return facilityRepository.saveAll(facilityList);
     }
+
+    public List<Facility> findFoodListByPlace(Double latitude, Double longitude) {
+        return facilityRepository.findFoodListByPlace(latitude, longitude);
+    }
 }
