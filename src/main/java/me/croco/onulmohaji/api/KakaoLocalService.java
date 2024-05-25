@@ -27,6 +27,9 @@ public class KakaoLocalService {
 
     private static final String KAKAO_LOCAL_TRANSCOORD = "/v2/local/geo/transcoord.json";
 
+    private static final String KAKAO_LOCAL_SEARCH_KEYWORD = "/v2/local/search/keyword";
+
+
     private final FacilityService facilityService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client_id}")
@@ -63,18 +66,26 @@ public class KakaoLocalService {
 //    HP8	병원
 //    PM9	약국
 
-    // 주차장 지하철역 문화시설 관광명소 음식점 카페
+    // 지하철역
+    // PK6 주차장
+    // CT1 문화시설
+    // AT4 관광명소
+    // FD6 음식점
+    // CE7 카페
 
-    public List<Facility> getLocalListByCategory(String categoryId, Double latitude, Double longitude) {
+    public List<Facility> getLocalListByCategory(String keyword, String categoryId, Double latitude, Double longitude) {
         WebClient webClient = getWebClient();
+
         String response = webClient.get()
-                            .uri(uriBuilder -> uriBuilder.path(KAKAO_LOCAL_SEARCH_BY_CATEGORY)
-                                    .queryParam("category_group_code", categoryId)
-                                    .queryParam("x", longitude)
-                                    .queryParam("y", latitude)
-                                    .queryParam("radius", 1000)
-                                    .queryParam("sort", "accuracy")
-                                    .build()
+                            .uri(uriBuilder ->
+                                uriBuilder.path( keyword == null ? KAKAO_LOCAL_SEARCH_BY_CATEGORY : KAKAO_LOCAL_SEARCH_KEYWORD)
+                                        .queryParam(keyword == null ? "category_group_code" : "query", keyword == null ? categoryId : keyword)
+                                        .queryParam("x", longitude)
+                                        .queryParam("y", latitude)
+                                        .queryParam("radius", 20000)
+                                        .queryParam("sort", "accuracy")
+                                        .build()
+
                             )
                             .retrieve()
                             .bodyToMono(String.class)
@@ -89,16 +100,7 @@ public class KakaoLocalService {
                 });
                 List<Facility> facilities = facilityList.stream().map(Facility::new).toList();
 
-                facilities.forEach(facility -> {
-                    Map<String, String> facilityDetail = getFacilityDetail(facility.getId());
-                    facility.setThumbnail(facilityDetail.get("thumbnail"));
-                    int scoresum = facilityDetail.get("scoresum").equals("null") ? 0 : Integer.parseInt(facilityDetail.get("scoresum"));
-                    int scorecnt = facilityDetail.get("scorecnt").equals("null") ? 0 : Integer.parseInt(facilityDetail.get("scorecnt"));
-                    facility.setScoresum(scoresum);
-                    facility.setScorecnt(scorecnt);
-                    facility.setWpointx(Long.parseLong(facilityDetail.get("wpointx")));
-                    facility.setWpointy(Long.parseLong(facilityDetail.get("wpointy")));
-                });
+                facilities.forEach(this::getFacilityDetail);
 
                 facilities = facilities.stream()
                         .sorted(Comparator.comparing(Facility::getScorecnt).reversed())
@@ -112,12 +114,12 @@ public class KakaoLocalService {
     }
 
     // Facility의 상세정보 조회
-    public Map<String, String> getFacilityDetail(Long facilityId) {
+    public Facility getFacilityDetail(Facility facility) {
         Map<String, String> facilityDetail = new HashMap<>();
 
         String response = WebClient.create(KAKAO_LOCAL_SEARCH_DETAIL)
                 .get()
-                .uri(String.valueOf(facilityId))
+                .uri(String.valueOf(facility.getId()))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -127,20 +129,31 @@ public class KakaoLocalService {
             JsonNode rootNode = mapper.readTree(response);
             JsonNode dataNode = rootNode.path("basicInfo");
             if (!dataNode.isMissingNode()) { // 'basicInfo' 필드가 존재하는지 확인
-                facilityDetail.put("thumbnail", mapper.convertValue(dataNode.path("mainphotourl"), String.class));
-                int scoresum = mapper.convertValue(dataNode.path("feedback").path("scoresum"), Integer.class);
-                int scorecnt = mapper.convertValue(dataNode.path("feedback").path("scorecnt"), Integer.class);
-                facilityDetail.put("scoresum", String.valueOf(scoresum));
-                facilityDetail.put("scorecnt", String.valueOf(scorecnt));
-                facilityDetail.put("wpointx", mapper.convertValue(dataNode.path("wpointx"), String.class));
-                facilityDetail.put("wpointy", mapper.convertValue(dataNode.path("wpointy"), String.class));
+
+                facility.setThumbnail(mapper.convertValue(dataNode.path("mainphotourl"), String.class));
+                facility.setScoresum(mapper.convertValue(dataNode.path("feedback").path("scoresum"), Integer.class));
+                facility.setScorecnt(mapper.convertValue(dataNode.path("feedback").path("scorecnt"), Integer.class));
+
+                StringBuilder builder = new StringBuilder();
+                List<String> tagList = mapper.convertValue(dataNode.path("tags"), new com.fasterxml.jackson.core.type.TypeReference<List<String>>() {});
+                if(tagList != null) {
+                    tagList.forEach(tag->{
+                        builder.append(tag);
+                        builder.append(",");
+                    });
+                }
+                facility.setTags(builder.toString());
+
+                facility.setWpointx(mapper.convertValue(dataNode.path("wpointx"), Long.class));
+                facility.setWpointy(mapper.convertValue(dataNode.path("wpointy"), Long.class));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return facilityDetail;
+        return facility;
     }
 
+    // 좌표계 변환
     public List<Long> getTranscoord(Double longitude, Double latitude) {
         List<Long> list = new ArrayList<>();
 
@@ -168,5 +181,6 @@ public class KakaoLocalService {
 
         return list;
     }
+
 
 }
