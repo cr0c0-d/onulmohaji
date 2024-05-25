@@ -54,12 +54,8 @@ public class ExhibitionService {
         exhibitionDetailRepository.save(exhibitionDetail);
     }
 
-    public List<Exhibition> findExhibitionListByDate(String date, Double latitude, Double longitude) {
-        return exhibitionRepository.findExhibitionListByDate(date, latitude, longitude);
-    }
-
-    public List<Exhibition> findExhibitionListByDateAndKeyword(String keyword, String date, Double latitude, Double longitude) {
-        return exhibitionRepository.findExhibitionListByDateAndKeyword(keyword, date, latitude, longitude);
+    public List<Exhibition> findExhibitionListByDate(String keyword, String date, Double latitude, Double longitude) {
+        return exhibitionRepository.findExhibitionListByDate(keyword, date, latitude, longitude);
     }
 
     public Exhibition findExhibitionById(String id) {

@@ -27,36 +27,21 @@ public class ExhibitionQueryDSLRepositoryImpl implements ExhibitionQueryDSLRepos
     }
 
     @Override
-    public List<Exhibition> findExhibitionListByDate(String date, Double latitude, Double longitude) {
-        BooleanExpression isBefore = qExhibition.startDate.lt(date);
-        BooleanExpression isAfter = qExhibition.endDate.gt(date);
-
-        return jpaQueryFactory.selectFrom(qExhibition)
-                .where(isBefore.and(isAfter))
-                .orderBy(haversineFormula(latitude, longitude).asc())
-                .fetch();
-    }
-
-    @Override
-    public List<Exhibition> findExhibitionListByDateAndKeyword(String keyword, String date, Double latitude, Double longitude) {
-        BooleanExpression isBefore = qExhibition.startDate.lt(date);
-        BooleanExpression isAfter = qExhibition.endDate.gt(date);
+    public List<Exhibition> findExhibitionListByDate(String keyword, String date, Double latitude, Double longitude) {
+        BooleanExpression isBefore = qExhibition.startDate.lt(date).or(qExhibition.startDate.eq(date));;
+        BooleanExpression isAfter = qExhibition.endDate.gt(date).or(qExhibition.endDate.eq(date));;;
 
         return jpaQueryFactory.selectFrom(qExhibition)
                 .where(isBefore.and(isAfter)
-                        .and(
-                                qExhibition.title.contains(keyword)
-                                        .or(qExhibition.place.contains(keyword))
-                                        .or(qExhibitionDetail.contents1.contains(keyword))
-                                        .or(qExhibitionDetail.contents2.contains(keyword))
-                        )
-
-                )
+                .and(keyword == null ? Expressions.asBoolean(true).isTrue() :
+                        qExhibition.title.contains(keyword)
+                                .or(qExhibition.place.contains(keyword))
+                                .or(qExhibitionDetail.contents1.contains(keyword))
+                                .or(qExhibitionDetail.contents2.contains(keyword))
+                ))
                 .join(qExhibitionDetail)
                 .on(qExhibition.seq.eq(qExhibitionDetail.seq))
                 .orderBy(haversineFormula(latitude, longitude).asc())
                 .fetch();
     }
-
-
 }

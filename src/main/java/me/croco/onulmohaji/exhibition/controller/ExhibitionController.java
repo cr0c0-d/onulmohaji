@@ -35,8 +35,7 @@ public class ExhibitionController {
     public ResponseEntity<List<PlaceListFindResponse>> findExhibitionListByDate(@RequestParam String date, @RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
         Localcode localcode = localcodeService.findById(localcodeId);
 
-        List<Exhibition> exhibitionList = keyword == null ? exhibitionService.findExhibitionListByDate(date, localcode.getLatitude(), localcode.getLongitude())
-                : exhibitionService.findExhibitionListByDateAndKeyword(keyword, date, localcode.getLatitude(), localcode.getLongitude());
+        List<Exhibition> exhibitionList = exhibitionService.findExhibitionListByDate(keyword, date, localcode.getLatitude(), localcode.getLongitude());
 
         List<PlaceListFindResponse> popupstoreListFindResponseList = exhibitionList.stream().map(PlaceListFindResponse::new).toList();
 
