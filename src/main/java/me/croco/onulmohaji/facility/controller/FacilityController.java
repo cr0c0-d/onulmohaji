@@ -32,7 +32,7 @@ public class FacilityController {
                 .body(facilityList);
     }
 
-    @GetMapping("/api/facility/list")
+    @GetMapping("/api/facility/local/list")
     public ResponseEntity<List<Facility>> findFacilityListByLocalcode(@RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
         Localcode localcode = localcodeService.findById(localcodeId);
 
@@ -46,6 +46,6 @@ public class FacilityController {
     public ResponseEntity<List<Facility>> findFacilityListByPlace(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
 
         return ResponseEntity.ok()
-                .body(kakaoLocalService.getLocalListByCategory(keyword, "FD6", latitude, longitude));
+                .body(facilityService.findFoodListByPlace(latitude, longitude));
     }
 }

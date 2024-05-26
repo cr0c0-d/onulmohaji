@@ -1,5 +1,6 @@
 package me.croco.onulmohaji.facility.service;
 
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.facility.domain.Facility;
 import me.croco.onulmohaji.facility.repository.FacilityRepository;
@@ -18,6 +19,13 @@ public class FacilityService {
     }
 
     public List<Facility> findFoodListByPlace(Double latitude, Double longitude) {
-        return facilityRepository.findFoodListByPlace(latitude, longitude);
+        List<Tuple> list = facilityRepository.findFoodListByPlace(latitude, longitude);
+        return list.stream().map(tuple -> {
+            Facility facility = tuple.get(0, Facility.class);
+            Double distance = tuple.get(1, Double.class);
+
+            facility.setDistance((int) Math.floor(distance*1000));
+            return facility;
+        }).toList();
     }
 }

@@ -1,5 +1,6 @@
 package me.croco.onulmohaji.facility.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,9 +25,13 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
     }
 
     @Override
-    public List<Facility> findFoodListByPlace(Double latitude, Double longitude) {
-        return jpaQueryFactory.selectFrom(qFacility)
-                .orderBy(haversineFormula(latitude, longitude).asc())
+    public List<Tuple> findFoodListByPlace(Double latitude, Double longitude) {
+        return jpaQueryFactory.select(qFacility, haversineFormula(latitude, longitude))
+                .from(qFacility)
+                .where(qFacility.categoryGroupCode.eq("FD6")
+                        .and(haversineFormula(latitude, longitude).lt(3))
+                )
+                .orderBy(qFacility.scorecnt.desc())
                 .limit(20)
                 .fetch();
     }
