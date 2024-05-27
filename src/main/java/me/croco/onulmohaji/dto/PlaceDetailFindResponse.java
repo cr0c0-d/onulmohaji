@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
+import me.croco.onulmohaji.festival.domain.Festival;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreDetail;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreImage;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PlaceDetailFindResponse {
-    private Long id;
+    private String id;
     private String title;
     private String subTitle;
     private String startDate;
@@ -32,7 +33,7 @@ public class PlaceDetailFindResponse {
 
 
     public PlaceDetailFindResponse(Popupstore popupstore, PopupstoreDetail detail, List<PopupstoreImage> imageList) {
-        this.id = popupstore.getStoreId();
+        this.id = String.valueOf(popupstore.getStoreId());
         this.title = HtmlUtils.htmlUnescape(popupstore.getTitle());
         this.startDate = popupstore.getStartDate();
         this.endDate = popupstore.getEndDate();
@@ -46,7 +47,7 @@ public class PlaceDetailFindResponse {
     }
 
     public PlaceDetailFindResponse(Exhibition exhibition, ExhibitionDetail detail) {
-        this.id = exhibition.getSeq();
+        this.id = String.valueOf(exhibition.getSeq());
         this.title = HtmlUtils.htmlUnescape(exhibition.getTitle());
         this.startDate = exhibition.getStartDate();
         this.endDate = exhibition.getEndDate();
@@ -59,4 +60,20 @@ public class PlaceDetailFindResponse {
         this.imageList.add(detail.getImgUrl());
         this.address = detail.getPlaceAddr();
     }
+
+    public PlaceDetailFindResponse(Festival festival) {
+        this.id = festival.getId();
+        this.title = festival.getTitle();
+        this.startDate = festival.getStartDate();
+        this.endDate = festival.getEndDate();
+        this.contents1 = festival.getContents1();
+        this.contents2 = festival.getContents2();
+        this.url = festival.getHomepageUrl();
+        this.gpsX = festival.getLongitude();
+        this.gpsY = festival.getLatitude();
+        this.imageList = new ArrayList<>();
+        this.imageList.add(festival.getThumbnail());
+        this.address = festival.getAddress();
+    }
+
 }

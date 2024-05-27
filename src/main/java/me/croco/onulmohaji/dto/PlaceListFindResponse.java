@@ -3,6 +3,7 @@ package me.croco.onulmohaji.dto;
 import lombok.Getter;
 import lombok.Setter;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
+import me.croco.onulmohaji.festival.domain.Festival;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import org.springframework.web.util.HtmlUtils;
 
@@ -12,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 public class PlaceListFindResponse {
-    private Long id;
+    private String id;
     private int categoryId;
     private String category;
     private String title;
@@ -29,7 +30,7 @@ public class PlaceListFindResponse {
     private String endDate;
 
     public PlaceListFindResponse(Popupstore popupstore) {
-        this.id = popupstore.getStoreId();
+        this.id = String.valueOf(popupstore.getStoreId());
         this.title = HtmlUtils.htmlUnescape(popupstore.getTitle());
         this.categoryId = popupstore.getCategoryId();
         this.address_short = popupstore.getTopLevelAddress();
@@ -46,7 +47,7 @@ public class PlaceListFindResponse {
     }
 
     public PlaceListFindResponse(Exhibition exhibition) {
-        this.id = exhibition.getSeq();
+        this.id = String.valueOf(exhibition.getSeq());
         this.title = HtmlUtils.htmlUnescape(exhibition.getTitle());
         this.startDate = LocalDate.parse(exhibition.getStartDate()).format(DateTimeFormatter.ofPattern("yy-MM-dd"));
         this.endDate = LocalDate.parse(exhibition.getEndDate()).format(DateTimeFormatter.ofPattern("yy-MM-dd"));
@@ -55,5 +56,17 @@ public class PlaceListFindResponse {
         this.thumbnails = exhibition.getThumbnail();
         this.latitude = exhibition.getGpsX();
         this.longitude = exhibition.getGpsY();
+    }
+
+    public PlaceListFindResponse(Festival festival) {
+        this.id = festival.getId();
+        this.title = festival.getTitle();
+        this.address_short = festival.getAreaNm();
+        this.address = festival.getAddress();
+        this.thumbnails = festival.getThumbnail();
+        this.latitude = festival.getLatitude();
+        this.longitude = festival.getLongitude();
+        this.startDate = festival.getStartDate();
+        this.endDate = festival.getEndDate();
     }
 }
