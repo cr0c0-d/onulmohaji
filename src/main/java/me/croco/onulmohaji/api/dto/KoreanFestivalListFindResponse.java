@@ -22,4 +22,5 @@ public class KoreanFestivalListFindResponse {
     private String fstvlUtztFareInfo;
     private String instaUrl;
     private String fstvlAspcsTelno;
+    private String fstvlHmpgUrl;
 }

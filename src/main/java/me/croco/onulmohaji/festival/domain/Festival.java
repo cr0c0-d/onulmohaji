@@ -58,11 +58,14 @@ public class Festival {
     @Column
     private String contact;
 
+    @Column
+    private String homepageUrl;
+
     public Festival(KoreanFestivalListFindResponse response) {
         this.id = response.getFstvlCntntsId();
-        this.thumbnail = response.getDispFstvlCntntsImgRout();
-        this.latitude = response.getYcrdVal();
-        this.longitude = response.getXcrdVal();
+        this.thumbnail = response.getDispFstvlCntntsImgRout().replace("/data/kfes/", "https://kfescdn.visitkorea.or.kr/kfes/upload/");
+        this.latitude = response.getXcrdVal();
+        this.longitude = response.getYcrdVal();
         this.contents1 = response.getFstvlOutlCn();
         this.contents2 = response.getFstvlCrmnCn();
         this.title = response.getCntntsNm();
@@ -73,6 +76,7 @@ public class Festival {
         this.fare = response.getFstvlUtztFareInfo();
         this.instaUrl = response.getInstaUrl();
         this.contact = response.getFstvlAspcsTelno();
+        this.homepageUrl = response.getFstvlHmpgUrl();
     }
 
 }
