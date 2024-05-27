@@ -61,6 +61,12 @@ public class Festival {
     @Column
     private String homepageUrl;
 
+    @Column
+    private Long wpointx;
+
+    @Column
+    private Long wpointy;
+
     public Festival(KoreanFestivalListFindResponse response) {
         this.id = response.getFstvlCntntsId();
         this.thumbnail = response.getDispFstvlCntntsImgRout().replace("/data/kfes/", "https://kfescdn.visitkorea.or.kr/kfes/upload/");
