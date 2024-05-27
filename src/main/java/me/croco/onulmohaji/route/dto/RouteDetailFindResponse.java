@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.facility.domain.Facility;
+import me.croco.onulmohaji.festival.domain.Festival;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.route.domain.RouteDetail;
 
@@ -21,7 +22,7 @@ public class RouteDetailFindResponse {
 
     private int orderNo;
 
-    private Long placeId;
+    private String placeId;
 
     private String placeType;
 
@@ -36,6 +37,21 @@ public class RouteDetailFindResponse {
     private Long wpointy;
 
     private String placeUrl;
+
+    public RouteDetailFindResponse(RouteDetail routeDetail, Festival festival) {
+        this.id = routeDetail.getId();
+        this.routeId = routeDetail.getRouteId();
+        this.orderNo = routeDetail.getOrderNo();
+        this.placeId = routeDetail.getPlaceId();
+        this.placeType = routeDetail.getPlaceType();
+
+        this.thumbnail = festival.getThumbnail();
+        this.placeName = festival.getTitle();
+        this.placeTypeName = "축제";
+        this.wpointx = festival.getWpointx();
+        this.wpointy = festival.getWpointy();
+        this.placeUrl = "/festival/" + festival.getId();
+    }
 
     public RouteDetailFindResponse(RouteDetail routeDetail, Exhibition exhibition) {
         this.id = routeDetail.getId();

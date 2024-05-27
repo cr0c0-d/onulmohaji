@@ -22,7 +22,7 @@ public class RouteDetail {
     private int orderNo;
 
     @Column(name = "place_id")
-    private Long placeId;
+    private String placeId;
 
     @Column(name = "place_type")
     private String placeType;

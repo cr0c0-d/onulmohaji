@@ -2,11 +2,22 @@ package me.croco.onulmohaji.route.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import me.croco.onulmohaji.api.KakaoLocalService;
+import me.croco.onulmohaji.exhibition.domain.Exhibition;
+import me.croco.onulmohaji.exhibition.repository.ExhibitionRepository;
+import me.croco.onulmohaji.facility.domain.Facility;
+import me.croco.onulmohaji.facility.repository.FacilityRepository;
+import me.croco.onulmohaji.festival.repository.FestivalRepository;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.repository.MemberRepository;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
+import me.croco.onulmohaji.popupstore.repository.PopupstoreRepository;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.domain.RouteDetail;
-import me.croco.onulmohaji.route.dto.*;
+import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
+import me.croco.onulmohaji.route.dto.RouteDetailFindResponse;
+import me.croco.onulmohaji.route.dto.RouteDetailUpdateRequest;
+import me.croco.onulmohaji.route.dto.RouteMapUrlFindRequest;
 import me.croco.onulmohaji.route.repository.RouteDetailRepository;
 import me.croco.onulmohaji.route.repository.RouteRepository;
 import me.croco.onulmohaji.util.Authorities;
@@ -16,12 +27,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +44,8 @@ public class RouteService {
     private final ExhibitionRepository exhibitionRepository;
     private final PopupstoreRepository popupstoreRepository;
     private final FacilityRepository facilityRepository;
+    private final FestivalRepository festivalRepository;
+    private final KakaoLocalService kakaoLocalService;
 
     public Long addRouteDetail(RouteDetailAddRequest addRequest, HttpServletRequest request) {
         Member loginMember = getLoginMember(request);
@@ -90,13 +102,16 @@ public class RouteService {
         return routeDetailList.stream().map(routeDetail -> {
             switch (routeDetail.getPlaceType()) {
                 case "exhibition" :
-                    return new RouteDetailFindResponse(routeDetail, exhibitionRepository.findById(routeDetail.getPlaceId()).get());
+                    return new RouteDetailFindResponse(routeDetail, exhibitionRepository.findById(Long.parseLong(routeDetail.getPlaceId())).get());
 
                 case "popup" :
-                    return new RouteDetailFindResponse(routeDetail, popupstoreRepository.findById(routeDetail.getPlaceId()).get());
+                    return new RouteDetailFindResponse(routeDetail, popupstoreRepository.findById(Long.parseLong(routeDetail.getPlaceId())).get());
+
+                case "festival" :
+                    return new RouteDetailFindResponse(routeDetail, festivalRepository.findById(routeDetail.getPlaceId()).get());
 
                 default:
-                    return new RouteDetailFindResponse(routeDetail, facilityRepository.findById(routeDetail.getPlaceId()).get());
+                    return new RouteDetailFindResponse(routeDetail, facilityRepository.findById(Long.parseLong(routeDetail.getPlaceId())).get());
             }
         }).toList();
     }
@@ -136,7 +151,7 @@ public class RouteService {
     public Member getLoginMember(HttpServletRequest request) {
         // 로그인 상태인지 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null) {
+        if (authentication == null) {
             boolean validToken = httpHeaderChecker.checkAuthorizationHeader(request);
 
             if (!validToken) {   // 비로그인 상태
@@ -147,5 +162,4 @@ public class RouteService {
         // 로그인 멤버 반환
         return memberRepository.findByEmail(authentication.getName()).get();
     }
-
 }

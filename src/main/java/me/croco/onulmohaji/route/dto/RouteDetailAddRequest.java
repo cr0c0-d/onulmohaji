@@ -6,7 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class RouteDetailAddRequest {
-    private Long placeId;
+    private String placeId;
     private String placeType;
     private String date;
 }
