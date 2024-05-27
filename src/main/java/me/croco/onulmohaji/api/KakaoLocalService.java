@@ -29,9 +29,6 @@ public class KakaoLocalService {
 
     private static final String KAKAO_LOCAL_SEARCH_KEYWORD = "/v2/local/search/keyword";
 
-
-    private final FacilityService facilityService;
-
     @Value("${spring.security.oauth2.client.registration.kakao.client_id}")
     private String apiKey;
 
@@ -105,7 +102,8 @@ public class KakaoLocalService {
                 facilities = facilities.stream()
                         .sorted(Comparator.comparing(Facility::getScorecnt).reversed())
                         .toList();
-                return facilityService.saveAll(facilities);
+
+                return facilities;
             }
         } catch (Exception e) {
             e.printStackTrace();
