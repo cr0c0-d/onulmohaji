@@ -21,13 +21,12 @@ import java.util.Map;
 public class FacilityController {
 
     private final FacilityService facilityService;
-    private final KakaoLocalService kakaoLocalService;
     private final LocalcodeService localcodeService;
 
 
     @GetMapping("/api/facility")
     public ResponseEntity<List<Facility>> findFacility(@RequestParam String categoryId, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
-        List<Facility> facilityList = kakaoLocalService.getLocalListByCategory(keyword, categoryId, latitude, longitude);
+        List<Facility> facilityList = facilityService.getNewFacilities(keyword, categoryId, latitude, longitude);
         return ResponseEntity.ok()
                 .body(facilityList);
     }
@@ -36,7 +35,7 @@ public class FacilityController {
     public ResponseEntity<List<Facility>> findFacilityListByLocalcode(@RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
         Localcode localcode = localcodeService.findById(localcodeId);
 
-        List<Facility> facilityList = kakaoLocalService.getLocalListByCategory(keyword, null, localcode.getLatitude(), localcode.getLongitude());
+        List<Facility> facilityList = facilityService.getNewFacilities(keyword, null, localcode.getLatitude(), localcode.getLongitude());
 
         return ResponseEntity.ok()
                 .body(facilityList);
@@ -44,7 +43,6 @@ public class FacilityController {
 
     @GetMapping("/api/facility/place/list")
     public ResponseEntity<List<Facility>> findFacilityListByPlace(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
-
         return ResponseEntity.ok()
                 .body(facilityService.findFoodListByPlace(latitude, longitude));
     }
