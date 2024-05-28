@@ -180,5 +180,37 @@ public class KakaoLocalService {
         return list;
     }
 
+    // 주소 -> 좌표계 검색
+    public List<Double> getAddressInfo(String address) {
+        List<Double> list = new ArrayList<>();
+
+        WebClient webClient = getWebClient();
+        String response = webClient.get()
+                .uri(uriBuilder -> uriBuilder.path(KAKAO_LOCAL_GET_ADDRESS)
+                        .queryParam("query", address)
+                        .queryParam("page", 1)
+                        .queryParam("size", 1)
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = mapper.readTree(response);
+            JsonNode dataNode = rootNode.path("documents");
+            if(!dataNode.isMissingNode() && !dataNode.isEmpty()) {
+                list.add(mapper.convertValue(dataNode.get(0).path("address").path("x"), Double.class));
+                list.add(mapper.convertValue(dataNode.get(0).path("address").path("y"), Double.class));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 
 }
