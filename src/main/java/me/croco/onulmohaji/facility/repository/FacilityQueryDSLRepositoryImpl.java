@@ -35,4 +35,27 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
                 .limit(20)
                 .fetch();
     }
+
+    @Override
+    public List<Facility> findDefaultFacilityList(Double latitude, Double longitude) {
+        return jpaQueryFactory.selectFrom(qFacility)
+                .where(qFacility.tags.contains("이색데이트").or(qFacility.tags.contains("실내놀거리")
+                        .or(qFacility.categoryName.contains("테마파크").or(qFacility.categoryName.contains("테마카페"))))
+                        .and(haversineFormula(latitude, longitude).lt(10))
+                )
+                .orderBy(qFacility.scorecnt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Facility> findFacilityListByKeyword(String keyword, Double latitude, Double longitude) {
+        return jpaQueryFactory.selectFrom(qFacility)
+                .where(qFacility.tags.contains(keyword)
+                        .and(haversineFormula(latitude, longitude).lt(10))
+                )
+                .orderBy(qFacility.scorecnt.desc())
+                .fetch();
+    }
+
+
 }

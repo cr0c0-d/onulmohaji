@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface FacilityQueryDSLRepository {
     List<Tuple> findFoodListByPlace(Double latitude, Double longitude);
+
+    List<Facility> findDefaultFacilityList(Double latitude, Double longitude);
+
+    List<Facility> findFacilityListByKeyword(String keyword, Double latitude, Double longitude);
 }

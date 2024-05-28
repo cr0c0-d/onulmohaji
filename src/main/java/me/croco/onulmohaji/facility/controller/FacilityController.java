@@ -35,7 +35,7 @@ public class FacilityController {
     public ResponseEntity<List<Facility>> findFacilityListByLocalcode(@RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
         Localcode localcode = localcodeService.findById(localcodeId);
 
-        List<Facility> facilityList = facilityService.getNewFacilities(keyword, null, localcode.getLatitude(), localcode.getLongitude());
+        List<Facility> facilityList = facilityService.findLocalFacilityList(keyword, localcode.getLatitude(), localcode.getLongitude());
 
         return ResponseEntity.ok()
                 .body(facilityList);
