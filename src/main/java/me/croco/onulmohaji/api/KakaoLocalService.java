@@ -95,15 +95,8 @@ public class KakaoLocalService {
             if (!dataNode.isMissingNode()) { // 'documents' 필드가 존재하는지 확인
                 List<KakaoLocalListFindResponse> facilityList = mapper.convertValue(dataNode, new com.fasterxml.jackson.core.type.TypeReference<List<KakaoLocalListFindResponse>>() {
                 });
-                List<Facility> facilities = facilityList.stream().map(Facility::new).toList();
 
-                facilities.forEach(this::getFacilityDetail);
-
-                facilities = facilities.stream()
-                        .sorted(Comparator.comparing(Facility::getScorecnt).reversed())
-                        .toList();
-
-                return facilities;
+                return facilityList.stream().map(Facility::new).map(this::getFacilityDetail).toList();
             }
         } catch (Exception e) {
             e.printStackTrace();
