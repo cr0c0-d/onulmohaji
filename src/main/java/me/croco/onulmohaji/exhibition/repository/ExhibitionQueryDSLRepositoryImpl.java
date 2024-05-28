@@ -38,6 +38,7 @@ public class ExhibitionQueryDSLRepositoryImpl implements ExhibitionQueryDSLRepos
                                 .or(qExhibition.place.contains(keyword))
                                 .or(qExhibitionDetail.contents1.contains(keyword))
                                 .or(qExhibitionDetail.contents2.contains(keyword))
+                                .or(qExhibitionDetail.placeAddr.contains(keyword))
                 ))
                 .join(qExhibitionDetail)
                 .on(qExhibition.seq.eq(qExhibitionDetail.seq))

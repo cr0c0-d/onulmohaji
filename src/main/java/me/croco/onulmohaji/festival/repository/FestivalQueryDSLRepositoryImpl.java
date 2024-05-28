@@ -43,6 +43,7 @@ public class FestivalQueryDSLRepositoryImpl implements FestivalQueryDSLRepositor
                                         .or(qFestival.contents1.contains(keyword))
                                         .or(qFestival.contents2.contains(keyword))
                                         .or(qFestival.title.contains(keyword))
+                                        .or(qFestival.address.contains(keyword))
                         )
                 )
                 .orderBy(haversineFormula(latitude, longitude).asc())

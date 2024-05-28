@@ -42,6 +42,7 @@ public class PopupstoreQueryDSLRepositoryImpl implements PopupstoreQueryDSLRepos
                                 .or(qPopupstore.name.contains(keyword))
                                 .or(qPopupstore.searchItems.contains(keyword))
                                 .or(qPopupstoreDetail.contents.contains(keyword))
+                                .or(qPopupstore.address.contains(keyword))
                         )
                 )
                 .join(qPopupstoreDetail)

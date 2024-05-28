@@ -44,16 +44,18 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
                         .and(haversineFormula(latitude, longitude).lt(10))
                 )
                 .orderBy(qFacility.scorecnt.desc())
+                .limit(20)
                 .fetch();
     }
 
     @Override
     public List<Facility> findFacilityListByKeyword(String keyword, Double latitude, Double longitude) {
         return jpaQueryFactory.selectFrom(qFacility)
-                .where(qFacility.tags.contains(keyword)
+                .where(qFacility.tags.contains(keyword).or(qFacility.placeName.contains(keyword)).or(qFacility.addressName.contains(keyword))
                         .and(haversineFormula(latitude, longitude).lt(10))
                 )
                 .orderBy(qFacility.scorecnt.desc())
+                .limit(20)
                 .fetch();
     }
 
