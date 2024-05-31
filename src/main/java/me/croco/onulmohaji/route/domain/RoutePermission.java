@@ -23,4 +23,7 @@ public class RoutePermission {
 
     @Column(name = "user_id")
     Long userId;
+
+    @Column(name = "route_date")
+    String routeDate;
 }
