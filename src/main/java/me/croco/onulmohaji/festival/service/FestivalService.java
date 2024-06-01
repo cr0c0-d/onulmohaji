@@ -23,9 +23,11 @@ public class FestivalService {
         List<KoreanFestivalListFindResponse> festivalList = koreanFestivalService.getFestivalList();
         List<Festival> savedList = festivalRepository.saveAll(festivalList.stream().map(Festival::new).toList());
         savedList.forEach(festival -> {
+            if(festival.getLongitude() != null && festival.getLatitude() != null) {
             List<Long> wpointList = kakaoLocalService.getTranscoord(festival.getLongitude(), festival.getLatitude());
             festival.setWpointx(wpointList.get(0));
             festival.setWpointy(wpointList.get(1));
+            }
         });
         return festivalRepository.saveAll(savedList);
     }

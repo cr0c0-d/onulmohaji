@@ -33,9 +33,11 @@ public class ExhibitionService {
 
             exhibition.setTitle(HtmlUtils.htmlUnescape(exhibition.getTitle()));
 
-            List<Long> wpointlist = kakaoLocalService.getTranscoord(exhibition.getGpsX(), exhibition.getGpsY());
-            exhibition.setWpointx(wpointlist.get(0));
-            exhibition.setWpointy(wpointlist.get(1));
+            if(exhibition.getGpsX() != null && exhibition.getGpsY() != null) {
+                List<Long> wpointlist = kakaoLocalService.getTranscoord(exhibition.getGpsX(), exhibition.getGpsY());
+                exhibition.setWpointx(wpointlist.get(0));
+                exhibition.setWpointy(wpointlist.get(1));
+            }
         });
         exhibitionRepository.saveAll(exhibitionList);
     }
