@@ -29,6 +29,9 @@ public class Route {
     @Column(name = "share_type")
     private int shareType;
 
+    @Column(name = "share_code")
+    private String shareCode;
+
     @Column
     private int valid;
 

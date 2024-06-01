@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.route.domain.QRoute;
 import me.croco.onulmohaji.route.domain.QRouteDetail;
+import me.croco.onulmohaji.route.domain.QRoutePermission;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
 import me.croco.onulmohaji.route.dto.RouteDetailUpdateRequest;
@@ -20,6 +21,7 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final QRoute qRoute = QRoute.route;
+    private final QRoutePermission qRoutePermission = QRoutePermission.routePermission;
     private final QRouteDetail qRouteDetail = QRouteDetail.routeDetail;
 
 
@@ -28,10 +30,12 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
 
         return Optional.ofNullable(
                 jpaQueryFactory.selectFrom(qRoute)
-                        .where(qRoute.routeDate.eq(date)
-                            .and(qRoute.userId.eq(userId)
+                        .where(qRoute.routeDate.eq(date).and(
+                                qRoute.userId.eq(userId).or(qRoutePermission.userId.eq(userId))
                         )
                 )
+                .join(qRoutePermission)
+                .on(qRoute.id.eq(qRoutePermission.routeId))
                 .fetchOne()
         );
     }

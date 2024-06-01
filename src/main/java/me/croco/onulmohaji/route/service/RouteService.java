@@ -26,6 +26,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -134,6 +135,74 @@ public class RouteService {
     public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
         routeRepository.updateRouteDetailOrder(routeDetailUpdateRequests);
     }
+
+    public String findRouteMapUrlByLatitudeAndLongitude(RouteMapUrlFindRequest request) {
+        Long startWpointx = null;
+        Long startWpointy = null;
+        Long endWpointx = null;
+        Long endWpointy = null;
+
+        String startPlaceType = request.getStartPlaceType();
+        String endPlaceType = request.getEndPlaceType();
+
+        switch (startPlaceType) {
+            case "popup" :
+                Popupstore popupstore = popupstoreRepository.findById(request.getStartPlaceId()).get();
+                startWpointx = popupstore.getWpointx();
+                startWpointy = popupstore.getWpointy();
+
+                break;
+
+            case "exhibition" :
+                Exhibition exhibition = exhibitionRepository.findById(request.getStartPlaceId()).get();
+                startWpointx = exhibition.getWpointx();
+                startWpointy = exhibition.getWpointy();
+
+                break;
+
+            default:
+                Facility facility = facilityRepository.findById(request.getStartPlaceId()).get();
+                startWpointx = facility.getWpointx();
+                startWpointy = facility.getWpointy();
+
+        }
+
+        switch (endPlaceType) {
+            case "popup" :
+                Popupstore popupstore = popupstoreRepository.findById(request.getStartPlaceId()).get();
+                endWpointx = popupstore.getWpointx();
+                endWpointy = popupstore.getWpointy();
+
+                break;
+
+            case "exhibition" :
+                Exhibition exhibition = exhibitionRepository.findById(request.getStartPlaceId()).get();
+                endWpointx = exhibition.getWpointx();
+                endWpointy = exhibition.getWpointy();
+
+                break;
+
+            default:
+                Facility facility = facilityRepository.findById(request.getStartPlaceId()).get();
+                endWpointx = facility.getWpointx();
+                endWpointy = facility.getWpointy();
+
+        }
+        String url = "https://map.kakao.com/?map_type=TYPE_MAP&target=walk&rt=" +
+                startWpointx+","+startWpointy+","+endWpointx+","+endWpointy+
+                "&rt1="+request.getStartPlaceName().replace(" ", "+") +
+                "&rt2=" + request.getEndPlaceName().replace(" ", "+");
+        return url;
+
+    }
+
+    public String findRouteMapUrlByWpointXAndY(RouteMapUrlFindRequest request) {
+        return "https://map.kakao.com/?map_type=TYPE_MAP&target=walk&rt=" +
+                request.getStartWpointX()+","+request.getStartWpointY()+","+request.getEndWpointX()+","+request.getEndWpointY()+
+                "&rt1="+request.getStartPlaceName().replace(" ", "+") +
+                "&rt2=" + request.getEndPlaceName().replace(" ", "+");
+    }
+
     public void deleteRouteDetail(Long routeDetailId) {
         RouteDetail routeDetail = routeDetailRepository.findById(routeDetailId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 routeDetail"));
         routeDetailRepository.deleteById(routeDetailId);
@@ -148,6 +217,24 @@ public class RouteService {
             routeDetailRepository.saveAll(routeDetailList);
         }
     }
+
+    public String getRoutePermissionUrl(Long routeId, HttpServletRequest request) {
+        Route route = routeRepository.findById(routeId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 routeId"));
+        Member loginMember = getLoginMember(request);
+
+        if(loginMember == null || !route.getUserId().equals(loginMember.getId())) { // 로그인 상태가 아니거나 route 생성자가 아닌 경우
+            throw new AccessDeniedException("권한 없음");
+        } else {
+            if(route.getShareCode() == null) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                route.setShareCode(bCryptPasswordEncoder.encode(String.valueOf(routeId)));
+                routeRepository.save(route);
+            }
+            return route.getShareCode();
+        }
+
+    }
+
     public Member getLoginMember(HttpServletRequest request) {
         // 로그인 상태인지 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
