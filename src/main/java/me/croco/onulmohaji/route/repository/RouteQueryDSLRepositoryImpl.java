@@ -34,7 +34,7 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
                                 qRoute.userId.eq(userId).or(qRoutePermission.userId.eq(userId))
                         )
                 )
-                .join(qRoutePermission)
+                .leftJoin(qRoutePermission)
                 .on(qRoute.id.eq(qRoutePermission.routeId))
                 .fetchOne()
         );

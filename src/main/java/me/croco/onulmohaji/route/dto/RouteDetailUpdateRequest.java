@@ -13,7 +13,7 @@ public class RouteDetailUpdateRequest {
 
     private int orderNo;
 
-    private Long placeId;
+    private String placeId;
 
     private String placeType;
 
