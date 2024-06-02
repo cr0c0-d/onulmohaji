@@ -58,4 +58,11 @@ public class RouteController {
     public void deleteRouteDetail(@PathVariable Long routeDetailId) {
         routeService.deleteRouteDetail(routeDetailId);
     }
+    @GetMapping("/api/route/permission/url/{routeId}")
+    public ResponseEntity<String> getRoutePermissionUrl(@PathVariable Long routeId, HttpServletRequest request) {
+        String routePermissionUrl = routeService.getRoutePermissionUrl(routeId, request);
+        return ResponseEntity.ok()
+                .body(routePermissionUrl);
+    }
+
 }
