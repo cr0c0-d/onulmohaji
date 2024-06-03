@@ -40,5 +40,12 @@ public class MemberController {
         return ResponseEntity.ok()
                 .body(new NaverLoginRequest(url, state));
     }
+
+    @GetMapping("/login/auth/naver/token")
+    public ResponseEntity<NaverTokenResponse> getAccessTokenNaver(@RequestParam String code, @RequestParam String state) {
+        NaverTokenResponse response = naverService.getAccessTokenNaver(code, state);
+        return ResponseEntity.ok()
+                .body(response);
+    }
 }
 
