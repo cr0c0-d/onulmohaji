@@ -42,7 +42,7 @@ public class WebOAuthSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers("/static/**");
+                .requestMatchers("/error", "/static/**", "/favicon.ico");
     }
 
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성

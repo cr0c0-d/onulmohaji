@@ -25,13 +25,16 @@ public class OAuthAttributes {
         //this.picture = picture;
     }
 
-    public  static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         return switch (registrationId) {
             case "google" ->
                  ofGoogle(userNameAttributeName, attributes);
 
             case "naver" ->
                 ofNaver(userNameAttributeName, (LinkedHashMap) attributes.get("response"));
+
+            case "kakao" ->
+                ofKakao(userNameAttributeName, attributes);
 
             default -> null;
         };
@@ -52,6 +55,16 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .nickname((String) attributes.get("nickname"))
                 .email("naver_" + (String) attributes.get("id"))
+                //.picture((String) attributes.get("picture"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                .nickname((String) ((LinkedHashMap) attributes.get("properties")).get("nickname"))
+                .email("kakao_" + attributes.get("id"))
                 //.picture((String) attributes.get("picture"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
