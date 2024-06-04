@@ -2,6 +2,7 @@ package me.croco.onulmohaji.config;
 
 import lombok.RequiredArgsConstructor;
 
+import me.croco.onulmohaji.config.auth.OAuthAttributes;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.repository.MemberRepository;
 import me.croco.onulmohaji.util.Authorities;
@@ -26,29 +27,30 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User user = super.loadUser(userRequest);
-        saveOrUpdate(user);
-        return user;
+
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
+        // 3. userNameAttributeName 가져오기
+        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
+                .getUserInfoEndpoint().getUserNameAttributeName();
+
+        // 4. 유저 정보 dto 생성
+        OAuthAttributes oAuth2UserInfo = OAuthAttributes.of(registrationId, userNameAttributeName, user.getAttributes());
+
+        // 5. 회원가입 및 로그인
+        Member member = saveOrUpdate(oAuth2UserInfo, registrationId);
+
+        // 6. OAuth2User로 반환
+        return member;
     }
 
-    private Member saveOrUpdate(OAuth2User oAuth2User) {
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        String email = (String) attributes.get("email");
-        String name = (String) attributes.get("name");
-//        Member member = memberRepository.findByEmail(email)
-//                .map(entity -> entity.update(name))
-//                .orElse(Member.builder()
-//                        .email(email)
-//                        .nickname(name)
-//                        .authorities(Authorities.ROLE_USER)
-//                        .build()
-//                );
-//        return memberRepository.save(member);
+    private Member saveOrUpdate(OAuthAttributes oAuth2UserInfo, String registrationId) {
 
-        Optional<Member> member = memberRepository.findByEmail(email);
+        Optional<Member> member = memberRepository.findByEmail(oAuth2UserInfo.getEmail());
         return member.orElseGet(() -> memberRepository.save(Member.builder()
-                .email(email)
-                .nickname(name)
-                .password("google")
+                .email(oAuth2UserInfo.getEmail())
+                .nickname(oAuth2UserInfo.getNickname())
+                .password(registrationId)
                 .authorities(Authorities.ROLE_USER)
                 //.profileImg(DEFAULT_PROFILE_IMAGE)
                 .build()));
