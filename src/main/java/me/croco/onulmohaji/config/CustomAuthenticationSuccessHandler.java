@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import me.croco.onulmohaji.config.auth.CustomOAuth2User;
+import me.croco.onulmohaji.config.auth.OAuthAttributes;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.service.MemberService;
 import me.croco.onulmohaji.refreshToken.domain.RefreshToken;
@@ -51,9 +53,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) throws IOException, ServletException {
         Member member;
 
-        if (authentication.getPrincipal() instanceof OAuth2User) {
-            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            member = memberService.findByEmail((String)oAuth2User.getAttributes().get("email"));
+        if (authentication.getPrincipal() instanceof CustomOAuth2User) {
+            CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+            member = memberService.findByEmail(oAuth2User.getEmail());
         } else {
             member = (Member) authentication.getPrincipal();
         }

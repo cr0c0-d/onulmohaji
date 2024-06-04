@@ -2,17 +2,20 @@ package me.croco.onulmohaji.config;
 
 import lombok.RequiredArgsConstructor;
 
+import me.croco.onulmohaji.config.auth.CustomOAuth2User;
 import me.croco.onulmohaji.config.auth.OAuthAttributes;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.repository.MemberRepository;
 import me.croco.onulmohaji.util.Authorities;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,18 +44,22 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         Member member = saveOrUpdate(oAuth2UserInfo, registrationId);
 
         // 6. OAuth2User로 반환
-        return member;
+        return new CustomOAuth2User(registrationId, user.getAttributes(), (List<GrantedAuthority>) user.getAuthorities().stream().toList(), member.getEmail());
     }
 
     private Member saveOrUpdate(OAuthAttributes oAuth2UserInfo, String registrationId) {
 
         Optional<Member> member = memberRepository.findByEmail(oAuth2UserInfo.getEmail());
-        return member.orElseGet(() -> memberRepository.save(Member.builder()
-                .email(oAuth2UserInfo.getEmail())
-                .nickname(oAuth2UserInfo.getNickname())
-                .password(registrationId)
-                .authorities(Authorities.ROLE_USER)
-                //.profileImg(DEFAULT_PROFILE_IMAGE)
-                .build()));
+        return memberRepository.save(
+                    member.orElseGet(() ->
+                            Member.builder()
+                                .email(oAuth2UserInfo.getEmail())
+                                .nickname(oAuth2UserInfo.getNickname())
+                                .password(registrationId)
+                                .authorities(Authorities.ROLE_USER)
+                                //.profileImg(DEFAULT_PROFILE_IMAGE)
+                                .build())
+                    .update(oAuth2UserInfo.getNickname())
+        );
     }
 }
