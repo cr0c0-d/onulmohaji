@@ -249,4 +249,11 @@ public class RouteService {
         // 로그인 멤버 반환
         return memberRepository.findByEmail(authentication.getName()).get();
     }
+
+    public RoutePermissionInfoResponse getRouteInfoByShareCode(String shareCode) {
+        Route route = routeRepository.findRouteByShareCode(shareCode).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 shareCode"));
+        Member member = memberRepository.findById(route.getUserId()).get();
+
+        return new RoutePermissionInfoResponse(route.getId(), route.getRouteDate(), member.getNickname());
+    }
 }

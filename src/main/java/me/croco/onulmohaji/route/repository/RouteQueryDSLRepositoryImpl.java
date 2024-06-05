@@ -61,5 +61,14 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
         });
     }
 
+    @Override
+    public Optional<Route> findRouteByShareCode(String shareCode) {
+        return Optional.ofNullable(
+                jpaQueryFactory.selectFrom(qRoute)
+                .where(qRoute.shareCode.eq(shareCode))
+                .fetchOne()
+        );
+    }
+
 
 }

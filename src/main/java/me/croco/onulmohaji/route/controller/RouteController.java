@@ -65,4 +65,14 @@ public class RouteController {
                 .body(routePermissionUrl);
     }
 
+    @GetMapping("/api/route/permission/{shareCode}")
+    public ResponseEntity<RoutePermissionInfoResponse> getRouteInfoByShareCode(@PathVariable String shareCode) {
+        try {
+            return ResponseEntity.ok()
+                    .body(routeService.getRouteInfoByShareCode(shareCode));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
 }

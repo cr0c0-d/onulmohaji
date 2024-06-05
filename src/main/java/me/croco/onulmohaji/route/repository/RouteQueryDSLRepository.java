@@ -15,4 +15,5 @@ public interface RouteQueryDSLRepository {
 
     public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests);
 
+    public Optional<Route> findRouteByShareCode(String shareCode);
 }
