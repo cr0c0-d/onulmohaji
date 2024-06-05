@@ -55,7 +55,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                             Member.builder()
                                 .email(oAuth2UserInfo.getEmail())
                                 .nickname(oAuth2UserInfo.getNickname())
-                                .password(registrationId)
+                                .password("oAuth2")
                                 .authorities(Authorities.ROLE_USER)
                                 //.profileImg(DEFAULT_PROFILE_IMAGE)
                                 .build())
