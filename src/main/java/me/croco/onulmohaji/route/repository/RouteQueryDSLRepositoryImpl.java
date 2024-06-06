@@ -3,10 +3,7 @@ package me.croco.onulmohaji.route.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.member.domain.Member;
-import me.croco.onulmohaji.route.domain.QRoute;
-import me.croco.onulmohaji.route.domain.QRouteDetail;
-import me.croco.onulmohaji.route.domain.QRoutePermission;
-import me.croco.onulmohaji.route.domain.Route;
+import me.croco.onulmohaji.route.domain.*;
 import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
 import me.croco.onulmohaji.route.dto.RouteDetailUpdateRequest;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +65,34 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
                 .where(qRoute.shareCode.eq(shareCode))
                 .fetchOne()
         );
+    }
+
+    @Override
+    public List<RoutePermission> findPermissionListByRouteId(Long routeId) {
+        return jpaQueryFactory.selectFrom(qRoutePermission)
+                .where(qRoutePermission.routeId.eq(routeId))
+                .fetch();
+    }
+
+    @Override
+    @Transactional
+    public void deleteRouteByDateAndUserId(String date, Long userId) {
+        jpaQueryFactory.delete(qRoute)
+                .where(qRoute.userId.eq(userId)
+                        .and(qRoute.routeDate.eq(date))
+                )
+                .execute();
+
+    }
+
+    @Override
+    @Transactional
+    public void deleteRoutePermissionByDateAndUserId(String date, Long userId) {
+        jpaQueryFactory.delete(qRoutePermission)
+                .where(qRoutePermission.routeDate.eq(date)
+                        .and(qRoutePermission.userId.eq(userId))
+                )
+                .execute();
     }
 
 

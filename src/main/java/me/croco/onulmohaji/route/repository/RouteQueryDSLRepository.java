@@ -2,6 +2,7 @@ package me.croco.onulmohaji.route.repository;
 
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.route.domain.Route;
+import me.croco.onulmohaji.route.domain.RoutePermission;
 import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
 import me.croco.onulmohaji.route.dto.RouteDetailUpdateRequest;
 
@@ -9,11 +10,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RouteQueryDSLRepository {
-    public Optional<Route> findRouteByDateAndUserId(String date, Long userId);
+    Optional<Route> findRouteByDateAndUserId(String date, Long userId);
 
-    public Optional<Integer> findMaxOrderNoByRouteId(Long routeId);
+    Optional<Integer> findMaxOrderNoByRouteId(Long routeId);
 
-    public void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests);
+    void updateRouteDetailOrder(List<RouteDetailUpdateRequest> routeDetailUpdateRequests);
 
-    public Optional<Route> findRouteByShareCode(String shareCode);
+    Optional<Route> findRouteByShareCode(String shareCode);
+
+    List<RoutePermission> findPermissionListByRouteId(Long routeId);
+
+    void deleteRouteByDateAndUserId(String date, Long userId);
+
+    void deleteRoutePermissionByDateAndUserId(String date, Long userId);
 }

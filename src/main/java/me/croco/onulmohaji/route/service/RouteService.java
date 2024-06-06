@@ -14,24 +14,20 @@ import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.popupstore.repository.PopupstoreRepository;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.domain.RouteDetail;
-import me.croco.onulmohaji.route.dto.RouteDetailAddRequest;
-import me.croco.onulmohaji.route.dto.RouteDetailFindResponse;
-import me.croco.onulmohaji.route.dto.RouteDetailUpdateRequest;
-import me.croco.onulmohaji.route.dto.RouteMapUrlFindRequest;
+import me.croco.onulmohaji.route.domain.RoutePermission;
+import me.croco.onulmohaji.route.dto.*;
 import me.croco.onulmohaji.route.repository.RouteDetailRepository;
+import me.croco.onulmohaji.route.repository.RoutePermissionRepository;
 import me.croco.onulmohaji.route.repository.RouteRepository;
-import me.croco.onulmohaji.util.Authorities;
 import me.croco.onulmohaji.util.HttpHeaderChecker;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -46,6 +42,7 @@ public class RouteService {
     private final PopupstoreRepository popupstoreRepository;
     private final FacilityRepository facilityRepository;
     private final FestivalRepository festivalRepository;
+    private final RoutePermissionRepository routePermissionRepository;
     private final KakaoLocalService kakaoLocalService;
 
     public Long addRouteDetail(RouteDetailAddRequest addRequest, HttpServletRequest request) {
@@ -77,24 +74,24 @@ public class RouteService {
 
     public Route findRoute(Long userId, String date, HttpServletRequest request) {
         Route route = routeRepository.findRouteByDateAndUserId(date, userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 route"));
-        Member loginMember = getLoginMember(request);
-        boolean isAdmin = loginMember.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch((authority -> authority.equals(Authorities.ROLE_ADMIN.getAuthorityName())));
-        switch (route.getShareType()) {
-
-            case 0 :    // 비공개
-                // 로그인 사용자의 route가 아니고, 로그인 사용자가 관리자가 아님
-                if(!route.getUserId().equals(loginMember.getId())
-                        && !isAdmin) {
-                    throw new AccessDeniedException("조회 권한 없음");
-                }
-                break;
-
-            case 1 :    // 제한 공유
-
-
-            case 2 :    // 완전 공유
-
-        }
+//        Member loginMember = getLoginMember(request);
+//        boolean isAdmin = loginMember.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch((authority -> authority.equals(Authorities.ROLE_ADMIN.getAuthorityName())));
+//        switch (route.getShareType()) {
+//
+//            case 0 :    // 비공개
+//                // 로그인 사용자의 route가 아니고, 로그인 사용자가 관리자가 아님
+//                if(!route.getUserId().equals(loginMember.getId())
+//                        && !isAdmin) {
+//                    throw new AccessDeniedException("조회 권한 없음");
+//                }
+//                break;
+//
+//            case 1 :    // 제한 공유
+//
+//
+//            case 2 :    // 완전 공유
+//
+//        }
         return route;
     }
 
@@ -227,7 +224,7 @@ public class RouteService {
         } else {
             if(route.getShareCode() == null) {
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                route.setShareCode(bCryptPasswordEncoder.encode(String.valueOf(routeId)));
+                route.setShareCode(bCryptPasswordEncoder.encode(String.valueOf(routeId)).replaceAll("/", ""));
                 routeRepository.save(route);
             }
             return route.getShareCode();
@@ -253,7 +250,27 @@ public class RouteService {
     public RoutePermissionInfoResponse getRouteInfoByShareCode(String shareCode) {
         Route route = routeRepository.findRouteByShareCode(shareCode).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 shareCode"));
         Member member = memberRepository.findById(route.getUserId()).get();
+        List<RoutePermission> permissionList = routeRepository.findPermissionListByRouteId(route.getId());
 
-        return new RoutePermissionInfoResponse(route.getId(), route.getRouteDate(), member.getNickname());
+        return new RoutePermissionInfoResponse(route, member.getNickname(), permissionList);
+    }
+
+    public RoutePermission addRoutePermission(RoutePermissionAddRequest request) {
+        Route targetRoute = routeRepository.findById(request.getRouteId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 routeId"));
+
+        // 기존 해당 날짜 해당 회원의 route 삭제
+        // 회원이 만든 route 삭제
+        routeRepository.deleteRouteByDateAndUserId(targetRoute.getRouteDate(), request.getUserId());
+
+        // 회원이 참여중이던 route permission 삭제
+        routeRepository.deleteRoutePermissionByDateAndUserId(targetRoute.getRouteDate(), request.getUserId());
+
+        RoutePermission routePermission = RoutePermission.builder()
+                                            .routeId(targetRoute.getId())
+                                            .routeDate(targetRoute.getRouteDate())
+                                            .userId(request.getUserId())
+                                            .build();
+        return routePermissionRepository.save(routePermission);
+
     }
 }

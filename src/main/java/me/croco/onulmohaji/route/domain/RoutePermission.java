@@ -1,10 +1,7 @@
 package me.croco.onulmohaji.route.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Setter
@@ -19,11 +16,18 @@ public class RoutePermission {
     private Long id;
 
     @Column(name = "route_id")
-    Long routeId;
+    private Long routeId;
 
     @Column(name = "user_id")
-    Long userId;
+    private Long userId;
 
     @Column(name = "route_date")
-    String routeDate;
+    private String routeDate;
+
+    @Builder
+    public RoutePermission(Long routeId, Long userId, String routeDate) {
+        this.routeId = routeId;
+        this.userId = userId;
+        this.routeDate = routeDate;
+    }
 }

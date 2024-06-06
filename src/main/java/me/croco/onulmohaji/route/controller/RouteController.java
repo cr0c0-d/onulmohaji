@@ -2,26 +2,15 @@ package me.croco.onulmohaji.route.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import me.croco.onulmohaji.exhibition.domain.Exhibition;
-import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
-import me.croco.onulmohaji.exhibition.repository.ExhibitionDetailRepository;
-import me.croco.onulmohaji.exhibition.repository.ExhibitionRepository;
-import me.croco.onulmohaji.popupstore.domain.Popupstore;
-import me.croco.onulmohaji.popupstore.repository.PopupstoreRepository;
 import me.croco.onulmohaji.route.domain.Route;
-import me.croco.onulmohaji.route.domain.RouteDetail;
+import me.croco.onulmohaji.route.domain.RoutePermission;
 import me.croco.onulmohaji.route.dto.*;
 import me.croco.onulmohaji.route.service.RouteService;
-import me.croco.onulmohaji.util.JsoupCrawling;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.HtmlUtils;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -58,6 +47,7 @@ public class RouteController {
     public void deleteRouteDetail(@PathVariable Long routeDetailId) {
         routeService.deleteRouteDetail(routeDetailId);
     }
+
     @GetMapping("/api/route/permission/url/{routeId}")
     public ResponseEntity<String> getRoutePermissionUrl(@PathVariable Long routeId, HttpServletRequest request) {
         String routePermissionUrl = routeService.getRoutePermissionUrl(routeId, request);
@@ -73,6 +63,13 @@ public class RouteController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @PostMapping("/api/route/permission")
+    public ResponseEntity<RoutePermission> addRoutePermission(@RequestBody RoutePermissionAddRequest request) {
+        RoutePermission routePermission = routeService.addRoutePermission(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(routePermission);
     }
 
 }
