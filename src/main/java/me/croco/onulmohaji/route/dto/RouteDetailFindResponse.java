@@ -36,6 +36,10 @@ public class RouteDetailFindResponse {
 
     private Long wpointy;
 
+    private Double latitude;
+
+    private Double longitude;
+
     private String placeUrl;
 
     public RouteDetailFindResponse(RouteDetail routeDetail, Festival festival) {
@@ -50,6 +54,8 @@ public class RouteDetailFindResponse {
         this.placeTypeName = "축제";
         this.wpointx = festival.getWpointx();
         this.wpointy = festival.getWpointy();
+        this.latitude = festival.getLatitude();
+        this.longitude = festival.getLongitude();
         this.placeUrl = "/festival/" + festival.getId();
     }
 
@@ -65,6 +71,8 @@ public class RouteDetailFindResponse {
         this.placeTypeName = "전시회 / 공연";
         this.wpointx = exhibition.getWpointx();
         this.wpointy = exhibition.getWpointy();
+        this.latitude = exhibition.getGpsY();
+        this.longitude = exhibition.getGpsX();
         this.placeUrl = "/exhibition/" + exhibition.getSeq();
     }
 
@@ -80,6 +88,8 @@ public class RouteDetailFindResponse {
         this.placeTypeName = "팝업스토어";
         this.wpointx = popupstore.getWpointx();
         this.wpointy = popupstore.getWpointy();
+        this.latitude = popupstore.getLatitude();
+        this.longitude = popupstore.getLongitude();
         this.placeUrl = "/popup/" + popupstore.getStoreId();
     }
 
@@ -101,6 +111,8 @@ public class RouteDetailFindResponse {
         this.placeTypeName = builder.toString();
         this.wpointx = facility.getWpointx();
         this.wpointy = facility.getWpointy();
+        this.latitude = facility.getLatitude();
+        this.longitude = facility.getLongitude();
         this.placeUrl = facility.getPlaceUrl();
     }
 }
