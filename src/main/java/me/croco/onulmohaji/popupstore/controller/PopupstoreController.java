@@ -37,9 +37,8 @@ public class PopupstoreController {
     }
 
     @GetMapping("/api/popup/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
-        Localcode localcode = localcodeService.findById(localcodeId);
-        List<Popupstore> popupstoreList = popupstoreService.findPopupstoreListByDate(keyword, date, localcode.getLatitude(), localcode.getLongitude());
+    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
+        List<Popupstore> popupstoreList = popupstoreService.findPopupstoreListByDate(keyword, date, latitude, longitude);
 
         List<PlaceListFindResponse> popupstoreListFindResponseList = popupstoreList.stream().map(PlaceListFindResponse::new).toList();
 

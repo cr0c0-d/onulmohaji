@@ -32,10 +32,9 @@ public class ExhibitionController {
     }
 
     @GetMapping("/api/exhibition/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findExhibitionListByDate(@RequestParam String date, @RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
-        Localcode localcode = localcodeService.findById(localcodeId);
+    public ResponseEntity<List<PlaceListFindResponse>> findExhibitionListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
 
-        List<Exhibition> exhibitionList = exhibitionService.findExhibitionListByDate(keyword, date, localcode.getLatitude(), localcode.getLongitude());
+        List<Exhibition> exhibitionList = exhibitionService.findExhibitionListByDate(keyword, date, latitude, longitude);
 
         List<PlaceListFindResponse> popupstoreListFindResponseList = exhibitionList.stream().map(PlaceListFindResponse::new).toList();
 

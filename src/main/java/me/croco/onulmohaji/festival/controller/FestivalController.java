@@ -40,9 +40,8 @@ public class FestivalController {
 //    }
 
     @GetMapping("/api/festival/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findFestivalListByDate(@RequestParam String date, @RequestParam Long localcodeId, @RequestParam(required = false) String keyword) {
-        Localcode localcode = localcodeService.findById(localcodeId);
-        List<Festival> festivalList = festivalService.findFestivalListByDate(keyword, date, localcode.getLatitude(), localcode.getLongitude());
+    public ResponseEntity<List<PlaceListFindResponse>> findFestivalListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
+        List<Festival> festivalList = festivalService.findFestivalListByDate(keyword, date, latitude, longitude);
 
         List<PlaceListFindResponse> festivalListFindResponseList = festivalList.stream().map(PlaceListFindResponse::new).toList();
 
