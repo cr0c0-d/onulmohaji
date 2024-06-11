@@ -30,6 +30,7 @@ public class PlaceListFindResponse {
     private Double longitude;
     private String startDate;
     private String endDate;
+    private String placeUrl;
 
     public PlaceListFindResponse(Popupstore popupstore) {
         this.placeId = String.valueOf(popupstore.getStoreId());
@@ -48,6 +49,7 @@ public class PlaceListFindResponse {
         this.endDate = popupstore.getEndDate();
         this.placeType = "popup";
         this.placeTypeName = "팝업스토어";
+        this.placeUrl = "/popup/" + popupstore.getStoreId();
     }
 
     public PlaceListFindResponse(Exhibition exhibition) {
@@ -62,6 +64,7 @@ public class PlaceListFindResponse {
         this.longitude = exhibition.getGpsY();
         this.placeType = "exhibition";
         this.placeTypeName = "전시회/공연";
+        this.placeUrl = "/exhibition/" + exhibition.getSeq();
     }
 
     public PlaceListFindResponse(Festival festival) {
@@ -76,5 +79,6 @@ public class PlaceListFindResponse {
         this.endDate = festival.getEndDate();
         this.placeType = "festival";
         this.placeTypeName = "축제";
+        this.placeUrl = "/festival/" + festival.getId();
     }
 }
