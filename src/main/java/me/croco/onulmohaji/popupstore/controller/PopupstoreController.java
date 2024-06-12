@@ -11,6 +11,7 @@ import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreDetail;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreImage;
+import me.croco.onulmohaji.popupstore.dto.PopupDetailFindResponse;
 import me.croco.onulmohaji.popupstore.service.PopupstoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,13 +49,12 @@ public class PopupstoreController {
     }
 
     @GetMapping("/api/popup/{id}")
-    public ResponseEntity<PlaceDetailFindResponse> findPopupstoreDetail(@PathVariable String id) {
+    public ResponseEntity<PopupDetailFindResponse> findPopupstoreDetail(@PathVariable String id) {
         Popupstore popupstore = popupstoreService.findPopupstoreById(id);
         PopupstoreDetail detail = popupstoreService.findPopupstoreDetailById(id);
         List<PopupstoreImage> images = popupstoreService.findPopupstoreImagesById(id);
 
-
         return ResponseEntity.ok()
-                .body(new PlaceDetailFindResponse(popupstore, detail, images));
+                .body(new PopupDetailFindResponse(popupstore, detail, images));
     }
 }
