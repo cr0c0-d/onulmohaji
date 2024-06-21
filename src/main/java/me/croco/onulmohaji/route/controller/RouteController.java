@@ -2,6 +2,8 @@ package me.croco.onulmohaji.route.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import me.croco.onulmohaji.member.domain.Member;
+import me.croco.onulmohaji.member.service.MemberService;
 import me.croco.onulmohaji.route.domain.Route;
 import me.croco.onulmohaji.route.domain.RoutePermission;
 import me.croco.onulmohaji.route.dto.*;
@@ -18,11 +20,14 @@ import java.util.List;
 public class RouteController {
 
     private final RouteService routeService;
+    private final MemberService memberService;
 
     @PostMapping("/api/routeDetail")
     public ResponseEntity<Long> addRouteDetail(@RequestBody RouteDetailAddRequest addRequest, HttpServletRequest request) {
+        Member loginMember = memberService.getLoginMember(request);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(routeService.addRouteDetail(addRequest, request));
+                .body(routeService.addRouteDetail(addRequest, loginMember));
     }
 
     @GetMapping("/api/route")
@@ -50,7 +55,9 @@ public class RouteController {
 
     @GetMapping("/api/route/permission/url/{routeId}")
     public ResponseEntity<String> getRoutePermissionUrl(@PathVariable Long routeId, HttpServletRequest request) {
-        String routePermissionUrl = routeService.getRoutePermissionUrl(routeId, request);
+        Member loginMember = memberService.getLoginMember(request);
+
+        String routePermissionUrl = routeService.getRoutePermissionUrl(routeId, loginMember);
         return ResponseEntity.ok()
                 .body(routePermissionUrl);
     }

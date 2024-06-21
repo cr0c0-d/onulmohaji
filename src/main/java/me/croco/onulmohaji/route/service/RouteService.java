@@ -45,8 +45,7 @@ public class RouteService {
     private final RoutePermissionRepository routePermissionRepository;
     private final KakaoLocalService kakaoLocalService;
 
-    public Long addRouteDetail(RouteDetailAddRequest addRequest, HttpServletRequest request) {
-        Member loginMember = getLoginMember(request);
+    public Long addRouteDetail(RouteDetailAddRequest addRequest, Member loginMember) {
         Route route = routeRepository.findRouteByDateAndUserId(addRequest.getDate(), loginMember.getId())
                 .orElseGet(
                         () -> routeRepository.save(Route.builder()
@@ -215,9 +214,8 @@ public class RouteService {
         }
     }
 
-    public String getRoutePermissionUrl(Long routeId, HttpServletRequest request) {
+    public String getRoutePermissionUrl(Long routeId, Member loginMember) {
         Route route = routeRepository.findById(routeId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 routeId"));
-        Member loginMember = getLoginMember(request);
 
         if(loginMember == null || !route.getUserId().equals(loginMember.getId())) { // 로그인 상태가 아니거나 route 생성자가 아닌 경우
             throw new AccessDeniedException("권한 없음");
@@ -230,21 +228,6 @@ public class RouteService {
             return route.getShareCode();
         }
 
-    }
-
-    public Member getLoginMember(HttpServletRequest request) {
-        // 로그인 상태인지 확인
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            boolean validToken = httpHeaderChecker.checkAuthorizationHeader(request);
-
-            if (!validToken) {   // 비로그인 상태
-                return null;
-            }
-        }
-
-        // 로그인 멤버 반환
-        return memberRepository.findByEmail(authentication.getName()).get();
     }
 
     public RoutePermissionInfoResponse getRouteInfoByShareCode(String shareCode) {
