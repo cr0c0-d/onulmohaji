@@ -8,6 +8,8 @@ import me.croco.onulmohaji.place.dto.CustomPlaceAddRequest;
 import me.croco.onulmohaji.place.repository.CustomPlaceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomPlaceService {
@@ -24,4 +26,9 @@ public class CustomPlaceService {
                 .longitude(addRequest.getLongitude())
                 .build());
     }
+
+    public List<CustomPlace> findCustomPlaceListByUserId(Long userId) {
+        return customPlaceRepository.findCustomPlaceListByUserId(userId);
+    }
+
 }
