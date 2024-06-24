@@ -9,6 +9,7 @@ import lombok.Setter;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.facility.domain.Facility;
 import me.croco.onulmohaji.festival.domain.Festival;
+import me.croco.onulmohaji.place.domain.CustomPlace;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.route.domain.RouteDetail;
 
@@ -114,5 +115,22 @@ public class RouteDetailFindResponse {
         this.latitude = facility.getLatitude();
         this.longitude = facility.getLongitude();
         this.placeUrl = facility.getPlaceUrl();
+    }
+
+    public RouteDetailFindResponse(RouteDetail routeDetail, CustomPlace customPlace) {
+        this.id = routeDetail.getId();
+        this.routeId = routeDetail.getRouteId();
+        this.orderNo = routeDetail.getOrderNo();
+        this.placeId = routeDetail.getPlaceId();
+        this.placeType = routeDetail.getPlaceType();
+
+        this.placeName = customPlace.getName();
+
+        this.placeTypeName = "나만의 장소";
+//        this.wpointx = customPlace.getWpointx();
+//        this.wpointy = customPlace.getWpointy();
+        this.latitude = customPlace.getLatitude();
+        this.longitude = customPlace.getLongitude();
+//        this.placeUrl = customPlace.getPlaceUrl();
     }
 }

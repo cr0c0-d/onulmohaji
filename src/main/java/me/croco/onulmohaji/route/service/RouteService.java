@@ -10,6 +10,7 @@ import me.croco.onulmohaji.facility.repository.FacilityRepository;
 import me.croco.onulmohaji.festival.repository.FestivalRepository;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.repository.MemberRepository;
+import me.croco.onulmohaji.place.repository.CustomPlaceRepository;
 import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.popupstore.repository.PopupstoreRepository;
 import me.croco.onulmohaji.route.domain.Route;
@@ -42,6 +43,7 @@ public class RouteService {
     private final PopupstoreRepository popupstoreRepository;
     private final FacilityRepository facilityRepository;
     private final FestivalRepository festivalRepository;
+    private final CustomPlaceRepository customPlaceRepository;
     private final RoutePermissionRepository routePermissionRepository;
     private final KakaoLocalService kakaoLocalService;
 
@@ -106,6 +108,9 @@ public class RouteService {
 
                 case "festival" :
                     return new RouteDetailFindResponse(routeDetail, festivalRepository.findById(routeDetail.getPlaceId()).get());
+
+                case "custom" :
+                    return new RouteDetailFindResponse(routeDetail, customPlaceRepository.findById(Long.parseLong(routeDetail.getPlaceId())).get());
 
                 default:
                     return new RouteDetailFindResponse(routeDetail, facilityRepository.findById(Long.parseLong(routeDetail.getPlaceId())).get());
