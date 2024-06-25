@@ -127,8 +127,8 @@ public class RouteDetailFindResponse {
         this.placeName = customPlace.getName();
 
         this.placeTypeName = "나만의 장소";
-//        this.wpointx = customPlace.getWpointx();
-//        this.wpointy = customPlace.getWpointy();
+        this.wpointx = customPlace.getWpointx();
+        this.wpointy = customPlace.getWpointy();
         this.latitude = customPlace.getLatitude();
         this.longitude = customPlace.getLongitude();
 //        this.placeUrl = customPlace.getPlaceUrl();
