@@ -41,7 +41,21 @@ public class CustomPlaceController {
     @PutMapping("/api/customPlace")
     public ResponseEntity<CustomPlaceAddResponse> updateCustomPlace(@RequestBody CustomPlaceUpdateRequest updateRequest, HttpServletRequest request) {
         Member loginMember = memberService.getLoginMember(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.ok()
                 .body(new CustomPlaceAddResponse(customPlaceService.updateCustomPlace(updateRequest, loginMember)));
+    }
+
+    @DeleteMapping("/api/customPlace")
+    public ResponseEntity<String> deleteCustomPlace(@RequestParam Long placeId, HttpServletRequest request) {
+        Member loginMember = memberService.getLoginMember(request);
+        try {
+            customPlaceService.deleteCustomPlace(placeId, loginMember);
+            return ResponseEntity.ok()
+                    .body("성공");
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("권한 오류");
+        }
     }
 }

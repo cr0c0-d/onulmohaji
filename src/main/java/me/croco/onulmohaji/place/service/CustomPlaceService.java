@@ -55,4 +55,15 @@ public class CustomPlaceService {
         return customPlace.update(updateRequest);
     }
 
+    public void deleteCustomPlace(Long placeId, Member loginMember) throws Exception {
+        CustomPlace customPlace = customPlaceRepository.findById(placeId).get();
+
+        if(customPlace.getUserId().equals(loginMember.getId())) {   // 로그인 유저의 custom place
+            customPlaceRepository.deleteById(placeId);
+        } else {
+            throw new Exception("권한 없음");
+        }
+
+    }
+
 }
