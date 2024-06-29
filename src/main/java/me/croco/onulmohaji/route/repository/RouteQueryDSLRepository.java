@@ -23,4 +23,6 @@ public interface RouteQueryDSLRepository {
     void deleteRouteByDateAndUserId(String date, Long userId);
 
     void deleteRoutePermissionByDateAndUserId(String date, Long userId);
+
+    List<Route> findRouteListByUserId(Long userId);
 }

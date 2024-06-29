@@ -79,4 +79,14 @@ public class RouteController {
                 .body(routePermission);
     }
 
+    @GetMapping("/api/route/dateList/{userId}")
+    public ResponseEntity<List<String>> findRouteDateList(@PathVariable Long userId) {
+        List<Route> routeList = routeService.findRouteDateList(userId);
+        List<String> routeDateList = routeList.stream().map(Route::getRouteDate).toList();
+
+        return ResponseEntity.ok()
+                .body(routeDateList);
+
+    }
+
 }

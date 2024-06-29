@@ -28,7 +28,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -260,5 +262,26 @@ public class RouteService {
                                             .build();
         return routePermissionRepository.save(routePermission);
 
+    }
+
+    public List<Route> findRouteDateList(Long userId) {
+
+        return routeRepository.findRouteListByUserId(userId);
+
+//        public Map<Integer, Map<Integer, List<Integer>>> findRouteDateList(Long userId) {
+//            Map<Integer, Map<Integer, List<Integer>>> routeDateMap = new HashMap<>();
+//
+//            List<Route> routeList = routeRepository.findRouteListByUserId(userId);
+//            routeList.stream().forEach(route -> {
+//                String routeDate = route.getRouteDate();
+//                String[] dateArr = routeDate.split("-");
+//                Map<Integer, List<Integer>> yearMap = routeDateMap.getOrDefault(Integer.parseInt(dateArr[0]), new HashMap<>());
+//                List<Integer> dayList = yearMap.getOrDefault(Integer.parseInt(dateArr[1]), new ArrayList<>());
+//                dayList.add(Integer.parseInt(dateArr[2]));
+//                yearMap.put(Integer.parseInt(dateArr[1]), dayList);
+//                routeDateMap.put(Integer.parseInt(dateArr[0]), yearMap);
+//            });
+//            return routeDateMap;
+//        }
     }
 }
