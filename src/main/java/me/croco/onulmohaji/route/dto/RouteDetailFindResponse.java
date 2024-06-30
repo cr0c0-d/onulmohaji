@@ -41,6 +41,10 @@ public class RouteDetailFindResponse {
 
     private Double longitude;
 
+    private String address;
+
+    private String addressRoad;
+
     private String placeUrl;
 
     public RouteDetailFindResponse(RouteDetail routeDetail, Festival festival) {
@@ -131,6 +135,8 @@ public class RouteDetailFindResponse {
         this.wpointy = customPlace.getWpointy();
         this.latitude = customPlace.getLatitude();
         this.longitude = customPlace.getLongitude();
+        this.address = customPlace.getAddress();
+        this.addressRoad = customPlace.getAddressRoad();
 //        this.placeUrl = customPlace.getPlaceUrl();
     }
 }
