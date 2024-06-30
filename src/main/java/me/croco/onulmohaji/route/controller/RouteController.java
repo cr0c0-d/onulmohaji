@@ -88,5 +88,25 @@ public class RouteController {
                 .body(routeDateList);
 
     }
+    @GetMapping("/api/route/list/{userId}")
+    public ResponseEntity<List<RouteFindResponse>> findRouteListByUserId(@PathVariable Long userId, HttpServletRequest request) {
+        Member loginMember = memberService.getLoginMember(request);
+        if(loginMember.getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .build();
+        }
+
+        List<Route> routeList = routeService.findRouteListByUserId(userId);
+
+        List<RouteFindResponse> routeFindResponseList = routeList.stream().map(route -> {
+                    List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
+                    List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
+                    return new RouteFindResponse(route, routeDetailList, routeMapUrlList);
+                }).toList();
+
+        return ResponseEntity.ok()
+                .body(routeFindResponseList);
+
+    }
 
 }

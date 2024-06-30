@@ -284,4 +284,8 @@ public class RouteService {
 //            return routeDateMap;
 //        }
     }
+
+    public List<Route> findRouteListByUserId(Long userId) {
+        return routeRepository.findRouteListByUserId(userId);
+    }
 }
