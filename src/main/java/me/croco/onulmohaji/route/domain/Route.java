@@ -23,6 +23,9 @@ public class Route {
     @Column(name = "route_date")
     private String routeDate;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "like_cnt")
     private int likeCnt;
 

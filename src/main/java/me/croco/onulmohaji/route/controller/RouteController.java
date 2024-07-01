@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.service.MemberService;
 import me.croco.onulmohaji.route.domain.Route;
+import me.croco.onulmohaji.route.domain.RouteDetail;
 import me.croco.onulmohaji.route.domain.RoutePermission;
 import me.croco.onulmohaji.route.dto.*;
 import me.croco.onulmohaji.route.service.RouteService;
@@ -43,7 +44,7 @@ public class RouteController {
         }
     }
 
-    @PutMapping("/api/route")
+    @PutMapping("/api/routeDetail")
     public void updateRouteDetailOrder(@RequestBody List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
         routeService.updateRouteDetailOrder(routeDetailUpdateRequests);
     }
@@ -106,6 +107,18 @@ public class RouteController {
 
         return ResponseEntity.ok()
                 .body(routeFindResponseList);
+
+    }
+
+    @PutMapping("/api/route")
+    public ResponseEntity<RouteFindResponse> saveRouteTitle(@RequestBody RouteTitleUpdateRequest updateRequest, HttpServletRequest request) {
+        Member loginMember = memberService.getLoginMember(request);
+        Route route = routeService.updateRouteTitle(updateRequest, loginMember);
+        List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
+        List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
+
+        return ResponseEntity.ok()
+                .body(new RouteFindResponse(route, routeDetailList, routeMapUrlList));
 
     }
 

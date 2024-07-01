@@ -16,6 +16,8 @@ public class RouteFindResponse {
 
     private Long userId;
 
+    private String title;
+
     private String routeDate;
 
     private int likeCnt;
@@ -31,6 +33,7 @@ public class RouteFindResponse {
     public RouteFindResponse(Route route, List<RouteDetailFindResponse> routeDetailList, List<String> routeMapUrlList) {
         this.routeId = route.getId();
         this.userId = route.getUserId();
+        this.title = route.getTitle();
         this.routeDate = route.getRouteDate();
         this.likeCnt = route.getLikeCnt();
         this.shareType = route.getShareType();

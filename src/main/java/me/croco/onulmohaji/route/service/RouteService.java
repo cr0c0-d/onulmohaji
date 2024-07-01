@@ -1,6 +1,7 @@
 package me.croco.onulmohaji.route.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.KakaoLocalService;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
@@ -22,15 +23,11 @@ import me.croco.onulmohaji.route.repository.RoutePermissionRepository;
 import me.croco.onulmohaji.route.repository.RouteRepository;
 import me.croco.onulmohaji.util.HttpHeaderChecker;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -52,14 +49,19 @@ public class RouteService {
     public Long addRouteDetail(RouteDetailAddRequest addRequest, Member loginMember) {
         Route route = routeRepository.findRouteByDateAndUserId(addRequest.getDate(), loginMember.getId())
                 .orElseGet(
-                        () -> routeRepository.save(Route.builder()
-                                .userId(loginMember.getId())
-                                .valid(1)
-                                .likeCnt(0)
-                                .routeDate(addRequest.getDate())
-                                .shareType(0)
-                                .build()
-                        )
+                        () -> {
+                            String[] date = addRequest.getDate().split("-");
+
+                            return routeRepository.save(Route.builder()
+                                    .userId(loginMember.getId())
+                                    .title(Integer.parseInt(date[1]) + "월 " + Integer.parseInt(date[2]) + "일의 일정")
+                                    .valid(1)
+                                    .likeCnt(0)
+                                    .routeDate(addRequest.getDate())
+                                    .shareType(0)
+                                    .build()
+                            );
+                        }
                 );
 
         int maxOrder = routeRepository.findMaxOrderNoByRouteId(route.getId()).orElse(0);
@@ -287,5 +289,18 @@ public class RouteService {
 
     public List<Route> findRouteListByUserId(Long userId) {
         return routeRepository.findRouteListByUserId(userId);
+    }
+
+    @Transactional
+    public Route updateRouteTitle(RouteTitleUpdateRequest request, Member loginMember) {
+        Route route = routeRepository.findById(request.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 route"));
+        List<RoutePermission> permissionList = routeRepository.findPermissionListByRouteId(request.getId());
+        permissionList = permissionList.stream().filter(routePermission -> routePermission.getUserId().equals(loginMember.getId())).toList();
+        if(route.getUserId().equals(loginMember.getId()) || !permissionList.isEmpty()) { // 권한이 있으면
+            route.setTitle(request.getTitle());
+            return route;
+        } else {
+            throw new AccessDeniedException("권한 없음");
+        }
     }
 }
