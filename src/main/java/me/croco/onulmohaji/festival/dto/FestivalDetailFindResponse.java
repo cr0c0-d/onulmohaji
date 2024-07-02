@@ -17,6 +17,8 @@ public class FestivalDetailFindResponse {
 
     private String placeId;
     private String placeName;
+    private String placeType = "festival";
+    private String placeTypeName = "축제";
     private String startDate;
     private String endDate;
     private Double latitude;

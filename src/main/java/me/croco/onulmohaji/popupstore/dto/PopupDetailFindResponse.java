@@ -16,6 +16,8 @@ public class PopupDetailFindResponse {
 
     private String placeId;
     private String placeName;
+    private String placeType = "popup";
+    private String placeTypeName = "팝업스토어";
     private String startDate;
     private String endDate;
     private Double latitude;
@@ -43,6 +45,7 @@ public class PopupDetailFindResponse {
     public PopupDetailFindResponse(Popupstore popupstore, PopupstoreDetail popupstoreDetail, List<PopupstoreImage> images) {
         this.placeId = String.valueOf(popupstore.getStoreId());
         this.placeName = popupstore.getName();
+
         this.startDate = popupstore.getStartDate();
         this.endDate = popupstore.getEndDate();
         this.latitude = popupstore.getLatitude();
