@@ -89,24 +89,41 @@ public class RouteController {
                 .body(routeDateList);
 
     }
+//    @GetMapping("/api/route/list/{userId}")
+//    public ResponseEntity<List<RouteFindResponse>> findRouteListByUserId(@PathVariable Long userId, HttpServletRequest request) {
+//        Member loginMember = memberService.getLoginMember(request);
+//        if(loginMember.getId().equals(userId)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                    .build();
+//        }
+//
+//        List<Route> routeList = routeService.findRouteListByUserId(userId);
+//
+//        List<RouteFindResponse> routeFindResponseList = routeList.stream().map(route -> {
+//                    List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
+//                    List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
+//                    return new RouteFindResponse(route, routeDetailList, routeMapUrlList);
+//                }).toList();
+//
+//        return ResponseEntity.ok()
+//                .body(routeFindResponseList);
+//
+//    }
+
     @GetMapping("/api/route/list/{userId}")
-    public ResponseEntity<List<RouteFindResponse>> findRouteListByUserId(@PathVariable Long userId, HttpServletRequest request) {
+    public ResponseEntity<List<RouteListFindResponse>> findRouteListByUserId(@PathVariable Long userId, HttpServletRequest request) {
         Member loginMember = memberService.getLoginMember(request);
-        if(loginMember.getId().equals(userId)) {
+        if(!loginMember.getId().equals(userId)) {    // 로그인 사용자 본인 정보가 아니면 Forbidden
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .build();
         }
 
         List<Route> routeList = routeService.findRouteListByUserId(userId);
 
-        List<RouteFindResponse> routeFindResponseList = routeList.stream().map(route -> {
-                    List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
-                    List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
-                    return new RouteFindResponse(route, routeDetailList, routeMapUrlList);
-                }).toList();
+        List<RouteListFindResponse> routeListFindResponse = routeList.stream().map(route -> new RouteListFindResponse(route, routeService.findRoutePermissionMemberList(route.getId()))).toList();
 
         return ResponseEntity.ok()
-                .body(routeFindResponseList);
+                .body(routeListFindResponse);
 
     }
 

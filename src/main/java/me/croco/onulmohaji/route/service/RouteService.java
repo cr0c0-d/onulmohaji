@@ -303,4 +303,9 @@ public class RouteService {
             throw new AccessDeniedException("권한 없음");
         }
     }
+
+    public List<Member> findRoutePermissionMemberList(Long routeId) {
+        List<RoutePermission> routePermissionList = routeRepository.findPermissionListByRouteId(routeId);
+        return routePermissionList.stream().map(routePermission -> memberRepository.findById(routePermission.getUserId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저 id"))).toList();
+    }
 }

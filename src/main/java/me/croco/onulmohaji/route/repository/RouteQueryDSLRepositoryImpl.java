@@ -99,7 +99,7 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
     public List<Route> findRouteListByUserId(Long userId) {
         return jpaQueryFactory.selectFrom(qRoute)
                 .where(qRoute.userId.eq(userId))
-                .orderBy(qRoute.routeDate.asc())
+                .orderBy(qRoute.routeDate.desc())
                 .fetch();
     }
 
