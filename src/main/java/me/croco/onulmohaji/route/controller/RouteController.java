@@ -36,9 +36,10 @@ public class RouteController {
         try {
             Route route = routeService.findRoute(userId, date, request);
             List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
+            List<Member> memberList = routeService.findRoutePermissionMemberList(route.getId());
             List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
             return ResponseEntity.ok()
-                    .body(new RouteFindResponse(route, routeDetailList, routeMapUrlList));
+                    .body(new RouteFindResponse(route, routeDetailList, routeMapUrlList, memberList));
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -133,9 +134,10 @@ public class RouteController {
         Route route = routeService.updateRouteTitle(updateRequest, loginMember);
         List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
         List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
+        List<Member> memberList = routeService.findRoutePermissionMemberList(route.getId());
 
         return ResponseEntity.ok()
-                .body(new RouteFindResponse(route, routeDetailList, routeMapUrlList));
+                .body(new RouteFindResponse(route, routeDetailList, routeMapUrlList, memberList));
 
     }
 
