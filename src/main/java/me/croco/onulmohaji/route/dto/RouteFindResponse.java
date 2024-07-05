@@ -30,7 +30,7 @@ public class RouteFindResponse {
 
     private List<String> routeMapUrlList;
 
-    private Map<Long, String> memberList;
+    private List<RouteMemberFindResponse> memberList;
 
     public RouteFindResponse(Route route, List<RouteDetailFindResponse> routeDetailList, List<String> routeMapUrlList, List<Member> memberList) {
         this.routeId = route.getId();
@@ -42,9 +42,6 @@ public class RouteFindResponse {
         this.valid = route.getValid();
         this.routeDetailList = routeDetailList;
         this.routeMapUrlList = routeMapUrlList;
-        Map<Long, String> memberMap = new HashMap<>();
-        memberList.forEach(member -> memberMap.put(member.getId(), member.getNickname()));
-        this.memberList = memberMap;
-
+        this.memberList = memberList.stream().map(RouteMemberFindResponse::new).toList();
     }
 }
