@@ -45,6 +45,20 @@ public class RouteController {
         }
     }
 
+    @GetMapping("/api/route/{routeId}")
+    public ResponseEntity<RouteFindResponse> findRouteById(@PathVariable Long routeId, HttpServletRequest request) {
+        try {
+            Route route = routeService.findRouteById(routeId);
+            List<RouteDetailFindResponse> routeDetailList = routeService.findRouteDetailListByRouteId(route.getId());
+            List<Member> memberList = routeService.findRoutePermissionMemberList(route.getId());
+            List<String> routeMapUrlList = routeService.getRouteMapUrlList(routeDetailList);
+            return ResponseEntity.ok()
+                    .body(new RouteFindResponse(route, routeDetailList, routeMapUrlList, memberList));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
     @PutMapping("/api/routeDetail")
     public void updateRouteDetailOrder(@RequestBody List<RouteDetailUpdateRequest> routeDetailUpdateRequests) {
         routeService.updateRouteDetailOrder(routeDetailUpdateRequests);
