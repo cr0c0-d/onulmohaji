@@ -100,6 +100,10 @@ public class RouteService {
         return route;
     }
 
+    public Route findRouteById(Long routeId) {
+        return routeRepository.findById(routeId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 route"));
+    }
+
     public List<RouteDetailFindResponse> findRouteDetailListByRouteId(Long routeId) {
         List<RouteDetail> routeDetailList = routeDetailRepository.findByRouteIdOrderByOrderNo(routeId);
         return routeDetailList.stream().map(routeDetail -> {
