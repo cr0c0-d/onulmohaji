@@ -22,7 +22,8 @@ public class ExhibitionService {
 
     private final KakaoLocalService kakaoLocalService;
 
-    public void saveExhibitionFromSearchResult(List<Exhibition> exhibitionList) {
+    public List<Exhibition> saveExhibitionFromSearchResult(List<Exhibition> exhibitionList) {
+        exhibitionList = exhibitionList.stream().filter(exhibition -> exhibition.getGpsX() != null).toList();
         exhibitionList.forEach(exhibition -> {
             // yyyyMMdd 형식 문자열 -> yyyy-MM-dd 형식으로 바꿔 저장
             DateTimeFormatter before = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -39,7 +40,7 @@ public class ExhibitionService {
                 exhibition.setWpointy(wpointlist.get(1));
             }
         });
-        exhibitionRepository.saveAll(exhibitionList);
+        return exhibitionRepository.saveAll(exhibitionList);
     }
 
     public void saveExhibitionDetailFromSearchResult(ExhibitionDetail exhibitionDetail) {

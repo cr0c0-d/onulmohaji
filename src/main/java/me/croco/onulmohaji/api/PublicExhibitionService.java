@@ -90,7 +90,7 @@ public class PublicExhibitionService {
                 List<Exhibition> exhibitions = mapper.convertValue(bodyNode, new com.fasterxml.jackson.core.type.TypeReference<List<Exhibition>>() {
                 });
 
-                exhibitionService.saveExhibitionFromSearchResult(exhibitions);
+                exhibitions = exhibitionService.saveExhibitionFromSearchResult(exhibitions);
                 getNewExhibitionDetails(exhibitions);   // 세부정보 조회하여 저장
             }
         } catch (Exception e) {
