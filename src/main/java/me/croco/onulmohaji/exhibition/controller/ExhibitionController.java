@@ -6,6 +6,7 @@ import me.croco.onulmohaji.dto.PlaceDetailFindResponse;
 import me.croco.onulmohaji.exhibition.domain.Exhibition;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
 import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
+import me.croco.onulmohaji.exhibition.dto.ExhibitionDetailFindResponse;
 import me.croco.onulmohaji.exhibition.service.ExhibitionService;
 import me.croco.onulmohaji.localcode.domain.Localcode;
 import me.croco.onulmohaji.localcode.service.LocalcodeService;
@@ -44,12 +45,12 @@ public class ExhibitionController {
     }
 
     @GetMapping("/api/exhibition/{id}")
-    public ResponseEntity<PlaceDetailFindResponse> findExhibitionDetail(@PathVariable String id) {
+    public ResponseEntity<ExhibitionDetailFindResponse> findExhibitionDetail(@PathVariable String id) {
         Exhibition exhibition = exhibitionService.findExhibitionById(id);
         ExhibitionDetail exhibitionDetail = exhibitionService.findExhibitionDetail(id);
 
         return ResponseEntity.ok()
-                .body(new PlaceDetailFindResponse(exhibition, exhibitionDetail));
+                .body(new ExhibitionDetailFindResponse(exhibition, exhibitionDetail));
     }
 
 }
