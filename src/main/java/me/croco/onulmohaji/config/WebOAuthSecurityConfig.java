@@ -56,6 +56,8 @@ public class WebOAuthSecurityConfig {
                                         "/signup", "/login", // 로그인
                                         "/api/token", // 토큰 발급
                                         "/api/token/**", // 토큰 하위
+                                        "/api/festival",    // 축제
+                                        "/api/festival/**",  // 축제 하위
                                         "/api/popup",   // 팝업스토어
                                         "/api/popup/**",   // 팝업스토어 하위
                                         "/api/exhibition",   // 전시회
@@ -67,7 +69,8 @@ public class WebOAuthSecurityConfig {
 
                                 .requestMatchers(
                                         new AntPathRequestMatcher("/api/articles/**", HttpMethod.GET.name()), // GET 요청은 모두 허용
-                                        new AntPathRequestMatcher("/api/members/", HttpMethod.POST.name())  // 회원가입만 허용
+                                        new AntPathRequestMatcher("/api/members/", HttpMethod.POST.name()),  // 회원가입만 허용
+                                        new AntPathRequestMatcher("/api/route/permission/**", HttpMethod.GET.name())    // route permission route정보 조회 허용
                                 ).permitAll()
 
                                 .requestMatchers("/api/**").authenticated()
@@ -180,10 +183,10 @@ public class WebOAuthSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        //configuration.addAllowedOrigin("http://localhost:3000"); // 허용할 오리진 설정
-        //configuration.addAllowedOrigin("http://25.10.86.27:3000");
-        configuration.addAllowedOrigin(origin);
-        //configuration.addAllowedOrigin("http://192.168.0.2:3000");
+        configuration.addAllowedOrigin("http://localhost:3000"); // 허용할 오리진 설정
+        configuration.addAllowedOrigin("http://25.10.86.27:3000");
+        configuration.addAllowedOrigin("http://192.168.0.2:3000");
+        //configuration.addAllowedOrigin(origin);
         configuration.addAllowedMethod("*"); // 모든 HTTP 메소드 허용
         configuration.addAllowedHeader("Content-Type"); // 헤더 허용
         configuration.addAllowedHeader("Authorization"); // 헤더 허용
