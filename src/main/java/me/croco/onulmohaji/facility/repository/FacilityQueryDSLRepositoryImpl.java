@@ -39,8 +39,8 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
     @Override
     public List<Facility> findDefaultFacilityList(Double latitude, Double longitude) {
         return jpaQueryFactory.selectFrom(qFacility)
-                .where(qFacility.tags.contains("이색데이트").or(qFacility.tags.contains("실내놀거리")
-                        .or(qFacility.categoryName.contains("테마파크").or(qFacility.categoryName.contains("테마카페"))))
+                .where(qFacility.tags.contains("이색데이트").or(qFacility.tags.contains("실내놀거리").or(qFacility.tags.contains("문화")).or(qFacility.tags.contains("산책")).or(qFacility.tags.contains("레저")).or(qFacility.tags.contains("명소"))
+                        .or(qFacility.categoryName.contains("테마파크").or(qFacility.categoryName.contains("테마카페").or(qFacility.categoryName.contains("문화")).or(qFacility.categoryName.contains("산책")))))
                         .and(haversineFormula(latitude, longitude).lt(10))
                 )
                 .orderBy(qFacility.scorecnt.desc())
