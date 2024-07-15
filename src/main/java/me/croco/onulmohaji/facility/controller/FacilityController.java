@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.KakaoLocalService;
 import me.croco.onulmohaji.facility.domain.Facility;
+import me.croco.onulmohaji.facility.dto.FacilityFindResponse;
 import me.croco.onulmohaji.facility.service.FacilityService;
 import me.croco.onulmohaji.localcode.domain.Localcode;
 import me.croco.onulmohaji.localcode.service.LocalcodeService;
@@ -25,24 +26,24 @@ public class FacilityController {
 
 
     @GetMapping("/api/facility")
-    public ResponseEntity<List<Facility>> findFacility(@RequestParam String categoryId, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
+    public ResponseEntity<List<FacilityFindResponse>> findFacility(@RequestParam String categoryId, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
         List<Facility> facilityList = facilityService.getNewFacilities(keyword, categoryId, latitude, longitude);
         return ResponseEntity.ok()
-                .body(facilityList);
+                .body(facilityList.stream().map(FacilityFindResponse::new).toList());
     }
 
     @GetMapping("/api/facility/local/list")
-    public ResponseEntity<List<Facility>> findFacilityListByLocalcode(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
+    public ResponseEntity<List<FacilityFindResponse>> findFacilityListByLocalcode(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
 
         List<Facility> facilityList = facilityService.findLocalFacilityList(keyword, latitude, longitude);
 
         return ResponseEntity.ok()
-                .body(facilityList);
+                .body(facilityList.stream().map(FacilityFindResponse::new).toList());
     }
 
     @GetMapping("/api/facility/place/list")
-    public ResponseEntity<List<Facility>> findFacilityListByPlace(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
+    public ResponseEntity<List<FacilityFindResponse>> findFacilityListByPlace(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
         return ResponseEntity.ok()
-                .body(facilityService.findFoodListByPlace(latitude, longitude));
+                .body(facilityService.findFoodListByPlace(latitude, longitude).stream().map(FacilityFindResponse::new).toList());
     }
 }
