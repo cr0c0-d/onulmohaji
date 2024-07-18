@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 public class FacilityListFindResponse {
     private String typeName;
-    private List<FacilityFindResponse> facilityFindResponseList;
+    private List<FacilityFindResponse> facilityList;
 
     public FacilityListFindResponse(String typeName, List<FacilityFindResponse> facilityFindResponseList) {
         this.typeName = typeName;
-        this.facilityFindResponseList = facilityFindResponseList;
+        this.facilityList = facilityFindResponseList;
     }
 }
