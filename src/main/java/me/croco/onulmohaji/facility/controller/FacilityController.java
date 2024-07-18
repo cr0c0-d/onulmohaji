@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.KakaoLocalService;
 import me.croco.onulmohaji.facility.domain.Facility;
 import me.croco.onulmohaji.facility.dto.FacilityFindResponse;
+import me.croco.onulmohaji.facility.dto.FacilityListFindResponse;
 import me.croco.onulmohaji.facility.service.FacilityService;
 import me.croco.onulmohaji.localcode.domain.Localcode;
 import me.croco.onulmohaji.localcode.service.LocalcodeService;
@@ -33,12 +34,12 @@ public class FacilityController {
     }
 
     @GetMapping("/api/facility/local/list")
-    public ResponseEntity<List<FacilityFindResponse>> findFacilityListByLocalcode(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
+    public ResponseEntity<List<FacilityListFindResponse>> findFacilityListByLocalcode(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
 
-        List<Facility> facilityList = facilityService.findLocalFacilityList(keyword, latitude, longitude);
+        List<FacilityListFindResponse> facilityList = facilityService.findLocalFacilityList(keyword, latitude, longitude);
 
         return ResponseEntity.ok()
-                .body(facilityList.stream().map(FacilityFindResponse::new).toList());
+                .body(facilityList);
     }
 
     @GetMapping("/api/facility/place/list")

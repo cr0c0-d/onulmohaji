@@ -11,4 +11,6 @@ public interface FacilityQueryDSLRepository {
     List<Facility> findDefaultFacilityList(Double latitude, Double longitude);
 
     List<Facility> findFacilityListByKeyword(String keyword, Double latitude, Double longitude);
+
+    List<Facility> findFacilityListByCategory(String type, Double latitude, Double longitude);
 }

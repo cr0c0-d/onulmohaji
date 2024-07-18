@@ -59,5 +59,16 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
                 .fetch();
     }
 
+    @Override
+    public List<Facility> findFacilityListByCategory(String type, Double latitude, Double longitude) {
+        return jpaQueryFactory.selectFrom(qFacility)
+                .where(qFacility.categoryName.contains(type)
+                .and(haversineFormula(latitude, longitude).lt(10))
+                )
+                .orderBy(qFacility.scorecnt.desc())
+                .limit(20)
+                .fetch();
+    }
+
 
 }
