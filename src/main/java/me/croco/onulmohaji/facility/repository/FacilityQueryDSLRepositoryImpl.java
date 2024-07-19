@@ -63,7 +63,7 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
     public List<Facility> findFacilityListByCategory(String type, Double latitude, Double longitude) {
         return jpaQueryFactory.selectFrom(qFacility)
                 .where((qFacility.categoryName.contains(type).or(qFacility.tags.contains(type)))
-                .and(haversineFormula(latitude, longitude).lt(10))
+                .and(haversineFormula(latitude, longitude).lt(3))
                 )
                 .orderBy(qFacility.scorecnt.desc())
                 .limit(20)
