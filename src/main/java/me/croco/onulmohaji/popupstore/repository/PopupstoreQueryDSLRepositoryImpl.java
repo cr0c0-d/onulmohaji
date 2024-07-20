@@ -29,7 +29,7 @@ public class PopupstoreQueryDSLRepositoryImpl implements PopupstoreQueryDSLRepos
     }
 
     @Override
-    public List<Popupstore> findPopupstoreListByDate(String keyword, String date, Double latitude, Double longitude) {
+    public List<Popupstore> findPopupstoreListByDate(String keyword, String date, Double latitude, Double longitude, int distance) {
         BooleanExpression isBefore = qPopupstore.startDate.lt(date).or(qPopupstore.startDate.eq(date));
         BooleanExpression isAfter = qPopupstore.endDate.gt(date).or(qPopupstore.endDate.eq(date));
 
@@ -44,6 +44,7 @@ public class PopupstoreQueryDSLRepositoryImpl implements PopupstoreQueryDSLRepos
                                 .or(qPopupstoreDetail.contents.contains(keyword))
                                 .or(qPopupstore.address.contains(keyword))
                         )
+                        .and(haversineFormula(latitude, longitude).lt(distance/1000))
                 )
                 .join(qPopupstoreDetail)
                 .on(qPopupstore.storeId.eq(qPopupstoreDetail.storeId))
