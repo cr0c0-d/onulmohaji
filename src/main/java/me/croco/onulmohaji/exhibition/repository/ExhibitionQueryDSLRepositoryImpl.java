@@ -27,7 +27,7 @@ public class ExhibitionQueryDSLRepositoryImpl implements ExhibitionQueryDSLRepos
     }
 
     @Override
-    public List<Exhibition> findExhibitionListByDate(String keyword, String date, Double latitude, Double longitude) {
+    public List<Exhibition> findExhibitionListByDate(String keyword, String date, Double latitude, Double longitude, int distance) {
         BooleanExpression isBefore = qExhibition.startDate.lt(date).or(qExhibition.startDate.eq(date));;
         BooleanExpression isAfter = qExhibition.endDate.gt(date).or(qExhibition.endDate.eq(date));;;
 
@@ -39,7 +39,9 @@ public class ExhibitionQueryDSLRepositoryImpl implements ExhibitionQueryDSLRepos
                                 .or(qExhibitionDetail.contents1.contains(keyword))
                                 .or(qExhibitionDetail.contents2.contains(keyword))
                                 .or(qExhibitionDetail.placeAddr.contains(keyword))
-                ))
+                )
+                .and(haversineFormula(latitude, longitude).lt(distance/1000))
+                )
                 .join(qExhibitionDetail)
                 .on(qExhibition.seq.eq(qExhibitionDetail.seq))
                 .orderBy(haversineFormula(latitude, longitude).asc())
