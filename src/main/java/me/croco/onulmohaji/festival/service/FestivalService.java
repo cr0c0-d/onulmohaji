@@ -6,7 +6,6 @@ import me.croco.onulmohaji.api.KoreanFestivalService;
 import me.croco.onulmohaji.api.dto.KoreanFestivalListFindResponse;
 import me.croco.onulmohaji.festival.domain.Festival;
 import me.croco.onulmohaji.festival.repository.FestivalRepository;
-import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,8 +46,8 @@ public class FestivalService {
 //        return festivalRepository.saveAll(festivalList);
 //    }
 
-    public List<Festival> findFestivalListByDate(String keyword, String date, Double latitude, Double longitude) {
-        return festivalRepository.findFestivalListByDate(keyword, date, latitude, longitude);
+    public List<Festival> findFestivalListByDate(String keyword, String date, Double latitude, Double longitude, int distance) {
+        return festivalRepository.findFestivalListByDate(keyword, date, latitude, longitude, distance);
     }
 
     public Festival findFestivalById(String id) {

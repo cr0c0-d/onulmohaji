@@ -32,7 +32,7 @@ public class FestivalQueryDSLRepositoryImpl implements FestivalQueryDSLRepositor
     }
 
     @Override
-    public List<Festival> findFestivalListByDate(String keyword, String date, Double latitude, Double longitude) {
+    public List<Festival> findFestivalListByDate(String keyword, String date, Double latitude, Double longitude, int distance) {
         BooleanExpression isBefore = qFestival.startDate.lt(date).or(qFestival.startDate.eq(date));
         BooleanExpression isAfter = qFestival.endDate.gt(date).or(qFestival.endDate.eq(date));
 
@@ -45,6 +45,7 @@ public class FestivalQueryDSLRepositoryImpl implements FestivalQueryDSLRepositor
                                         .or(qFestival.title.contains(keyword))
                                         .or(qFestival.address.contains(keyword))
                         )
+                        .and(haversineFormula(latitude, longitude).lt(distance/1000))
                 )
                 .orderBy(haversineFormula(latitude, longitude).asc())
                 .fetch();

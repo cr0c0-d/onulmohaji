@@ -7,5 +7,5 @@ import java.util.List;
 public interface FestivalQueryDSLRepository {
 
     List<Festival> findXyNullFestivals();
-    List<Festival> findFestivalListByDate(String keyword, String date, Double latitude, Double longitude);
+    List<Festival> findFestivalListByDate(String keyword, String date, Double latitude, Double longitude, int distance);
 }
