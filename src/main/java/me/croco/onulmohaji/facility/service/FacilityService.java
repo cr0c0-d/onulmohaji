@@ -101,13 +101,6 @@ public class FacilityService {
     public List<Facility> findFoodListByPlace(Double latitude, Double longitude) {
         CompletableFuture.runAsync(() -> facilityRepository.saveAll(kakaoLocalService.getLocalListByCategory(null, "FD6", latitude, longitude)));
 
-        List<Tuple> list = facilityRepository.findFoodListByPlace(latitude, longitude);
-        return list.stream().map(tuple -> {
-            Facility facility = tuple.get(0, Facility.class);
-            Double distance = tuple.get(1, Double.class);
-
-            facility.setDistance((int) Math.floor(distance*1000));
-            return facility;
-        }).toList();
+        return facilityRepository.findFoodListByPlace(latitude, longitude);
     }
 }

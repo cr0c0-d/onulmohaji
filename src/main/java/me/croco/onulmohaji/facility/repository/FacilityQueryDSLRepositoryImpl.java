@@ -25,8 +25,8 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
     }
 
     @Override
-    public List<Tuple> findFoodListByPlace(Double latitude, Double longitude) {
-        return jpaQueryFactory.select(qFacility, haversineFormula(latitude, longitude))
+    public List<Facility> findFoodListByPlace(Double latitude, Double longitude) {
+        return jpaQueryFactory.select(qFacility)
                 .from(qFacility)
                 .where(qFacility.categoryGroupCode.eq("FD6")
                         .and(haversineFormula(latitude, longitude).lt(3))
