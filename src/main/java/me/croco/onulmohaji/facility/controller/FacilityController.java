@@ -34,9 +34,9 @@ public class FacilityController {
     }
 
     @GetMapping("/api/facility/local/list")
-    public ResponseEntity<List<FacilityListFindResponse>> findFacilityListByLocalcode(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
+    public ResponseEntity<List<FacilityListFindResponse>> findFacilityListByLocalcode(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam int distance, @RequestParam(required = false) String keyword) {
 
-        List<FacilityListFindResponse> facilityList = facilityService.findLocalFacilityList(keyword, latitude, longitude);
+        List<FacilityListFindResponse> facilityList = facilityService.findLocalFacilityList(keyword, latitude, longitude, distance);
 
         return ResponseEntity.ok()
                 .body(facilityList);

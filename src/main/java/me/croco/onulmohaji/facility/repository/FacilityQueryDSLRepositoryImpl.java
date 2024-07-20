@@ -60,13 +60,13 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
     }
 
     @Override
-    public List<Facility> findFacilityListByCategory(String type, Double latitude, Double longitude) {
+    public List<Facility> findFacilityListByCategory(String type, Double latitude, Double longitude, int distance) {
         return jpaQueryFactory.selectFrom(qFacility)
                 .where((qFacility.categoryName.contains(type).or(qFacility.tags.contains(type)))
-                .and(haversineFormula(latitude, longitude).lt(3))
+                .and(haversineFormula(latitude, longitude).lt(distance/10))
                 )
                 .orderBy(qFacility.scorecnt.desc())
-                .limit(20)
+                //.limit(20)
                 .fetch();
     }
 

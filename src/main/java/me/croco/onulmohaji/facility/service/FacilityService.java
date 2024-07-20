@@ -50,7 +50,7 @@ public class FacilityService {
 //        }
 //        return facilityList;
 //    }
-    public List<FacilityListFindResponse> findLocalFacilityList(String keyword, Double latitude, Double longitude) {
+    public List<FacilityListFindResponse> findLocalFacilityList(String keyword, Double latitude, Double longitude, int distance) {
         List<FacilityListFindResponse> responses = new ArrayList<>();
 
         /**
@@ -71,7 +71,7 @@ public class FacilityService {
             String typeName = it.next();
 
             while(true) {
-                List<FacilityFindResponse> facilityList = facilityRepository.findFacilityListByCategory(categoryList.get(typeName), latitude, longitude).stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList();
+                List<FacilityFindResponse> facilityList = facilityRepository.findFacilityListByCategory(categoryList.get(typeName), latitude, longitude, distance).stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList();
                 responses.add(new FacilityListFindResponse(typeName, facilityList));
 
                 if(it.hasNext()) {
