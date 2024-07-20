@@ -30,7 +30,7 @@ public class FacilityController {
     public ResponseEntity<List<FacilityFindResponse>> findFacility(@RequestParam String categoryId, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
         List<Facility> facilityList = facilityService.getNewFacilities(keyword, categoryId, latitude, longitude);
         return ResponseEntity.ok()
-                .body(facilityList.stream().map(FacilityFindResponse::new).toList());
+                .body(facilityList.stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList());
     }
 
     @GetMapping("/api/facility/local/list")
@@ -45,6 +45,6 @@ public class FacilityController {
     @GetMapping("/api/facility/place/list")
     public ResponseEntity<List<FacilityFindResponse>> findFacilityListByPlace(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam(required = false) String keyword) {
         return ResponseEntity.ok()
-                .body(facilityService.findFoodListByPlace(latitude, longitude).stream().map(FacilityFindResponse::new).toList());
+                .body(facilityService.findFoodListByPlace(latitude, longitude).stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList());
     }
 }

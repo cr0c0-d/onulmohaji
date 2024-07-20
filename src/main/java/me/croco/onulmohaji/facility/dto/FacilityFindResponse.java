@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import me.croco.onulmohaji.facility.domain.Facility;
+import me.croco.onulmohaji.util.Haversine;
 
 @Setter
 @Getter
@@ -12,7 +13,7 @@ public class FacilityFindResponse {
     private Long id; //  "16618597",
     private String placeName; //  "장생당약국",
     private String placeTypeName;
-    private int distance; //  미터 기준 거리
+    private Double distance; //  미터 기준 거리
     private String placeUrl; // http://place.map.kakao.com/16618597",
     private String categoryName; //  "의료,건강 > 약국",
     private String addressName; //  "서울 강남구 대치동 943-16",
@@ -29,11 +30,11 @@ public class FacilityFindResponse {
     private Long wpointx;
     private Long wpointy;
 
-    public FacilityFindResponse(Facility facility) {
+    public FacilityFindResponse(Facility facility, Double latitude, Double longitude) {
         this.id = facility.getId();
         this.placeName = facility.getPlaceName();
         this.placeTypeName = facility.getCategoryName().substring(facility.getCategoryName().lastIndexOf(" > ") + 3);
-        this.distance = facility.getDistance();
+        this.distance = Haversine.getDistance(latitude, longitude, facility);
         this.placeUrl = facility.getPlaceUrl();
         this.categoryName = facility.getCategoryName();
         this.addressName = facility.getAddressName();
