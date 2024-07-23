@@ -61,21 +61,21 @@ public class FacilityService {
             Map<String, String> categoryList = new HashMap<>();
 
             // 표시이름 : 검색어
-            categoryList.put("음식점", "음식점");
-            categoryList.put("테마카페", "테마카페");
-            categoryList.put("관광명소", "관광,명소");
-            categoryList.put("문화예술", "문화,예술");
-            categoryList.put("실내놀거리", "실내놀거리");
+            categoryList.put("food", "음식점");
+            categoryList.put("cafe", "테마카페");
+            categoryList.put("attraction", "관광,명소");
+            categoryList.put("art", "문화,예술");
+            categoryList.put("indoor", "실내놀거리");
 
             Iterator<String> it = categoryList.keySet().iterator();
-            String typeName = it.next();
+            String type = it.next();
 
             while(true) {
-                List<FacilityFindResponse> facilityList = facilityRepository.findFacilityListByCategory(categoryList.get(typeName), latitude, longitude, distance).stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList();
-                responses.add(new FacilityListFindResponse(typeName, facilityList));
+                List<FacilityFindResponse> facilityList = facilityRepository.findFacilityListByCategory(categoryList.get(type), latitude, longitude, distance).stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList();
+                responses.add(new FacilityListFindResponse(type, categoryList.get(type), facilityList));
 
                 if(it.hasNext()) {
-                    typeName = it.next();
+                    type = it.next();
                 } else {
                     break;
                 }
@@ -92,7 +92,7 @@ public class FacilityService {
 
         } else {
            List<Facility> facilityList = facilityRepository.saveAll(kakaoLocalService.getLocalListByCategory(keyword, null, latitude, longitude));
-           responses.add(new FacilityListFindResponse("기타 장소", facilityList.stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList()));
+           responses.add(new FacilityListFindResponse("etc", "기타 장소", facilityList.stream().map(facility -> new FacilityFindResponse(facility, latitude, longitude)).toList()));
         }
 
         return responses;
