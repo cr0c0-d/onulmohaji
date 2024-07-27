@@ -27,7 +27,7 @@ public class MemberController {
     @GetMapping("/api/memberSearchInfo/{memberId}")
     public ResponseEntity<MemberSearchInfoFindResponse> findMemberSearchInfo(@PathVariable Long memberId) {
         return ResponseEntity.ok()
-                .body(new MemberSearchInfoFindResponse(memberService.findMemberSearchInfo(memberId)));
+                .body(memberService.findMemberSearchInfo(memberId));
     }
 }
 

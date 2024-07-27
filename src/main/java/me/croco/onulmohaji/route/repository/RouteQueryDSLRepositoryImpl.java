@@ -106,5 +106,19 @@ public class RouteQueryDSLRepositoryImpl implements RouteQueryDSLRepository {
                 .fetch();
     }
 
+    @Override
+    public String findNearestRouteDateByUserId(Long userId) {
+        String todayStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return jpaQueryFactory.select(qRoute.routeDate)
+                .from(qRoute)
+                .where(
+                        (qRoute.userId.eq(userId).or(qRoutePermission.userId.eq(userId)))
+                                .and(qRoute.routeDate.gt(todayStr).or(qRoute.routeDate.eq(todayStr)))
+                )
+                .leftJoin(qRoutePermission)
+                .on(qRoute.id.eq(qRoutePermission.routeId))
+                .fetchOne();
+    }
+
 
 }

@@ -5,10 +5,14 @@ import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.domain.MemberSearchInfo;
 import me.croco.onulmohaji.member.dto.MemberAddRequest;
+import me.croco.onulmohaji.member.dto.MemberSearchInfoFindResponse;
 import me.croco.onulmohaji.member.repository.MemberRepository;
 import me.croco.onulmohaji.member.repository.MemberSearchInfoRepository;
+import me.croco.onulmohaji.route.repository.RouteRepository;
 import me.croco.onulmohaji.util.Authorities;
 import me.croco.onulmohaji.util.HttpHeaderChecker;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.format.datetime.standard.DateTimeFormatterFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +21,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @RequiredArgsConstructor
 @Service
 public class MemberService implements UserDetailsService {
@@ -24,6 +31,7 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final MemberSearchInfoRepository memberSearchInfoRepository;
     private final HttpHeaderChecker httpHeaderChecker;
+    private final RouteRepository routeRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -57,8 +65,13 @@ public class MemberService implements UserDetailsService {
                 .getId();
     }
 
-    public MemberSearchInfo findMemberSearchInfo(Long memberId) {
-        return memberSearchInfoRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 ID"));
+    public MemberSearchInfoFindResponse findMemberSearchInfo(Long memberId) {
+        MemberSearchInfo memberSearchInfo = memberSearchInfoRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 ID"));
+        String defaultDateValue = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        if (memberSearchInfo.getDefaultDate().equals("route")) {    // 날짜 기본값이 가까운 미래 일정일 경우
+            defaultDateValue = routeRepository.findNearestRouteDateByUserId(memberId);
+        }
+        return new MemberSearchInfoFindResponse(memberSearchInfo, defaultDateValue);
     }
     public Member getLoginMember(HttpServletRequest request) {
         // 로그인 상태인지 확인

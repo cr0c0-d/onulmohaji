@@ -17,12 +17,14 @@ public class MemberSearchInfoFindResponse {
     private String categoryFilter = "{}";
 
     private String defaultDate = "today";
+    private String defaultDateValue;
 
-    public MemberSearchInfoFindResponse(MemberSearchInfo memberSearchInfo) {
+    public MemberSearchInfoFindResponse(MemberSearchInfo memberSearchInfo, String defaultDateValue) {
         this.id = memberSearchInfo.getId();
         this.localcodeId = memberSearchInfo.getLocalcodeId();
         this.distance = memberSearchInfo.getDistance();
         this.categoryFilter = memberSearchInfo.getCategoryFilter();
         this.defaultDate = memberSearchInfo.getDefaultDate();
+        this.defaultDateValue = defaultDateValue;
     }
 }
