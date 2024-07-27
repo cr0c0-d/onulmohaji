@@ -3,12 +3,11 @@ package me.croco.onulmohaji.member.controller;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.NaverService;
 import me.croco.onulmohaji.member.dto.MemberAddRequest;
+import me.croco.onulmohaji.member.dto.MemberSearchInfoFindResponse;
 import me.croco.onulmohaji.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +22,12 @@ public class MemberController {
         return userId != null
                 ? ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(userId))
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @GetMapping("/api/memberSearchInfo/{memberId}")
+    public ResponseEntity<MemberSearchInfoFindResponse> findMemberSearchInfo(@PathVariable Long memberId) {
+        return ResponseEntity.ok()
+                .body(new MemberSearchInfoFindResponse(memberService.findMemberSearchInfo(memberId)));
     }
 }
 

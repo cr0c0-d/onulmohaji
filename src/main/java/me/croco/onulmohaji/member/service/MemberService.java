@@ -3,8 +3,10 @@ package me.croco.onulmohaji.member.service;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.member.domain.Member;
+import me.croco.onulmohaji.member.domain.MemberSearchInfo;
 import me.croco.onulmohaji.member.dto.MemberAddRequest;
 import me.croco.onulmohaji.member.repository.MemberRepository;
+import me.croco.onulmohaji.member.repository.MemberSearchInfoRepository;
 import me.croco.onulmohaji.util.Authorities;
 import me.croco.onulmohaji.util.HttpHeaderChecker;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final MemberSearchInfoRepository memberSearchInfoRepository;
     private final HttpHeaderChecker httpHeaderChecker;
 
     @Override
@@ -54,6 +57,9 @@ public class MemberService implements UserDetailsService {
                 .getId();
     }
 
+    public MemberSearchInfo findMemberSearchInfo(Long memberId) {
+        return memberSearchInfoRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 ID"));
+    }
     public Member getLoginMember(HttpServletRequest request) {
         // 로그인 상태인지 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
