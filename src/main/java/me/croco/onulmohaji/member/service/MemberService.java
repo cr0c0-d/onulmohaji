@@ -1,11 +1,13 @@
 package me.croco.onulmohaji.member.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.member.domain.Member;
 import me.croco.onulmohaji.member.domain.MemberSearchInfo;
 import me.croco.onulmohaji.member.dto.MemberAddRequest;
 import me.croco.onulmohaji.member.dto.MemberSearchInfoFindResponse;
+import me.croco.onulmohaji.member.dto.MemberSearchInfoUpdateRequest;
 import me.croco.onulmohaji.member.repository.MemberRepository;
 import me.croco.onulmohaji.member.repository.MemberSearchInfoRepository;
 import me.croco.onulmohaji.route.repository.RouteRepository;
@@ -73,6 +75,17 @@ public class MemberService implements UserDetailsService {
         }
         return new MemberSearchInfoFindResponse(memberSearchInfo, defaultDateValue);
     }
+
+    @Transactional
+    public void updateMemberSearchInfo(MemberSearchInfoUpdateRequest request) {
+        MemberSearchInfo memberSearchInfo = memberSearchInfoRepository.findById(request.getId()).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원 ID"));
+
+        memberSearchInfo.setDefaultDate(request.getDefaultDate());
+        memberSearchInfo.setLocalcodeId(request.getLocalcodeId());
+        memberSearchInfo.setDistance(request.getDistance());
+        memberSearchInfo.setCategoryFilter(request.getCategoryFilter());
+    }
+
     public Member getLoginMember(HttpServletRequest request) {
         // 로그인 상태인지 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
