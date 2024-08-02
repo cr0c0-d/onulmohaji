@@ -65,6 +65,7 @@ spring:
 
 apiKey:
   exhibitionSearch: ENC(KTwFpSskSahpn8JHPHNREkXcwVwoXgFWflefvXhYGWb6jrRWycvFIoyAY3bZB9QTBfVCG0Wqtj2XC7sz760szUM9tJ1rOJvvmKkqAjeAvG9D7NX0RKU/cwx8X67uEy7sRJkRuMlMp/SBfR2E1HRdtQ==)
+  exhibitionSearchApi2 : ENC(UW7ZCJyYfcynAAm8AYEjep5v3P6qR3HTtxxUdMSlGNu1nIyQmtM1YG6nV3xtZa323wt/ZB0JUzQ=)
 
 jwt:
   issuer: cr0c0
