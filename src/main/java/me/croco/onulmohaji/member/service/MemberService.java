@@ -69,9 +69,14 @@ public class MemberService implements UserDetailsService {
 
     public MemberSearchInfoFindResponse findMemberSearchInfo(Long memberId) {
         MemberSearchInfo memberSearchInfo = memberSearchInfoRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 ID"));
-        String defaultDateValue = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String defaultDateValue = null;
+
         if (memberSearchInfo.getDefaultDate().equals("route")) {    // 날짜 기본값이 가까운 미래 일정일 경우
             defaultDateValue = routeRepository.findNearestRouteDateByUserId(memberId);
+        }
+
+        if(defaultDateValue == null) {
+            defaultDateValue = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
         return new MemberSearchInfoFindResponse(memberSearchInfo, defaultDateValue);
     }
