@@ -41,7 +41,7 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
         return jpaQueryFactory.selectFrom(qFacility)
                 .where(qFacility.tags.contains("이색데이트").or(qFacility.tags.contains("실내놀거리").or(qFacility.tags.contains("문화")).or(qFacility.tags.contains("산책")).or(qFacility.tags.contains("레저")).or(qFacility.tags.contains("명소"))
                         .or(qFacility.categoryName.contains("테마파크").or(qFacility.categoryName.contains("테마카페").or(qFacility.categoryName.contains("문화")).or(qFacility.categoryName.contains("산책")))))
-                        .and(haversineFormula(latitude, longitude).lt(10))
+                        .and(haversineFormula(latitude, longitude).lt(1000))
                 )
                 .orderBy(qFacility.scorecnt.desc())
                 .limit(20)
@@ -52,7 +52,7 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
     public List<Facility> findFacilityListByKeyword(String keyword, Double latitude, Double longitude) {
         return jpaQueryFactory.selectFrom(qFacility)
                 .where(qFacility.tags.contains(keyword).or(qFacility.placeName.contains(keyword)).or(qFacility.addressName.contains(keyword))
-                        .and(haversineFormula(latitude, longitude).lt(10))
+                        .and(haversineFormula(latitude, longitude).lt(1000))
                 )
                 .orderBy(qFacility.scorecnt.desc())
                 .limit(20)
@@ -62,8 +62,16 @@ public class FacilityQueryDSLRepositoryImpl implements FacilityQueryDSLRepositor
     @Override
     public List<Facility> findFacilityListByCategory(String type, Double latitude, Double longitude, int distance) {
         return jpaQueryFactory.selectFrom(qFacility)
-                .where((qFacility.categoryName.contains(type).or(qFacility.tags.contains(type)))
-                .and(haversineFormula(latitude, longitude).lt(distance/10))
+                .where(
+                        (
+                                qFacility.categoryName.contains(type)
+                                        .or(
+                                                qFacility.tags.contains(type)
+                                        )
+                        )
+                    .and(
+                            haversineFormula(latitude, longitude).lt(distance/1000)
+                    )
                 )
                 .orderBy(qFacility.scorecnt.desc())
                 //.limit(20)
