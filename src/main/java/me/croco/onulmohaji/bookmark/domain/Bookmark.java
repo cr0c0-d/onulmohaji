@@ -1,6 +1,7 @@
 package me.croco.onulmohaji.bookmark.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +23,12 @@ public class Bookmark {
 
     @Column(name = "place_id", nullable = false)
     private String placeId;
+
+    @Builder
+    public Bookmark(Long userId, String placeType, String placeId) {
+        this.userId = userId;
+        this.placeType = placeType;
+        this.placeId = placeId;
+    }
 
 }
