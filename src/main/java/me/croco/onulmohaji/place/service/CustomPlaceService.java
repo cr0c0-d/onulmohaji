@@ -30,7 +30,7 @@ public class CustomPlaceService {
                 .longitude(addRequest.getLongitude())
                 .build();
 
-        List<Long> wpointList = kakaoLocalService.getTranscoord(customPlace.getLatitude(), customPlace.getLongitude());
+        List<Long> wpointList = kakaoLocalService.getTranscoord(customPlace.getLongitude(), customPlace.getLatitude());
 
         customPlace.setWpointx(wpointList.get(0));
         customPlace.setWpointy(wpointList.get(1));
@@ -47,7 +47,7 @@ public class CustomPlaceService {
         CustomPlace customPlace = customPlaceRepository.findById(updateRequest.getId()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 id"));
 
 
-        List<Long> wpointList = kakaoLocalService.getTranscoord(customPlace.getLatitude(), customPlace.getLongitude());
+        List<Long> wpointList = kakaoLocalService.getTranscoord(customPlace.getLongitude(), customPlace.getLatitude());
 
         updateRequest.setWpointx(wpointList.get(0));
         updateRequest.setWpointy(wpointList.get(1));
