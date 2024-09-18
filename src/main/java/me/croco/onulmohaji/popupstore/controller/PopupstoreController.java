@@ -41,7 +41,7 @@ public class PopupstoreController {
     public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam int distance, @RequestParam(required = false) String keyword) {
         List<Popupstore> popupstoreList = popupstoreService.findPopupstoreListByDate(keyword, date, latitude, longitude, distance);
 
-        List<PlaceListFindResponse> popupstoreListFindResponseList = popupstoreList.stream().map(PlaceListFindResponse::new).toList();
+        List<PlaceListFindResponse> popupstoreListFindResponseList = popupstoreList.stream().map(popupstore -> new PlaceListFindResponse(popupstore, latitude, longitude)).toList();
 
         return ResponseEntity.ok()
                 .body(popupstoreListFindResponseList);

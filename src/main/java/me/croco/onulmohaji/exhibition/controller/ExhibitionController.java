@@ -37,7 +37,7 @@ public class ExhibitionController {
 
         List<Exhibition> exhibitionList = exhibitionService.findExhibitionListByDate(keyword, date, latitude, longitude, distance);
 
-        List<PlaceListFindResponse> popupstoreListFindResponseList = exhibitionList.stream().map(PlaceListFindResponse::new).toList();
+        List<PlaceListFindResponse> popupstoreListFindResponseList = exhibitionList.stream().map(exhibition -> new PlaceListFindResponse(exhibition, latitude, longitude)).toList();
 
         return ResponseEntity.ok()
                 .body(popupstoreListFindResponseList);

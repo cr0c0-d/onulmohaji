@@ -44,7 +44,7 @@ public class FestivalController {
     public ResponseEntity<List<PlaceListFindResponse>> findFestivalListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam int distance, @RequestParam(required = false) String keyword) {
         List<Festival> festivalList = festivalService.findFestivalListByDate(keyword, date, latitude, longitude, distance);
 
-        List<PlaceListFindResponse> festivalListFindResponseList = festivalList.stream().map(PlaceListFindResponse::new).toList();
+        List<PlaceListFindResponse> festivalListFindResponseList = festivalList.stream().map(festival -> new PlaceListFindResponse(festival, latitude, longitude)).toList();
 
         return ResponseEntity.ok()
                 .body(festivalListFindResponseList);
