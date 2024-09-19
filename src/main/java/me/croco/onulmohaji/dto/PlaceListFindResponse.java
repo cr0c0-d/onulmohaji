@@ -84,7 +84,7 @@ public class PlaceListFindResponse {
         this.placeType = "festival";
         this.placeTypeName = "축제";
         this.placeUrl = "/festival/" + festival.getId();
-        this.distance = getDistance(latitude, longitude, festival.getLatitude(), festival.getLatitude());
+        this.distance = getDistance(latitude, longitude, festival.getLatitude(), festival.getLongitude());
     }
 
     int getDistance(Double latitude, Double longitude, Double latitude_2, Double longitude_2) {
