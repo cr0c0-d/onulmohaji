@@ -3,5 +3,5 @@ package me.croco.onulmohaji.bookmark.repository;
 import java.util.List;
 
 public interface BookmarkQueryDSLRepository {
-    List<String> findPopupstoreBookmark(Long userId);
+    List<String> findPlaceIdListByUserIdAndPlaceType(Long userId, String placeType);
 }

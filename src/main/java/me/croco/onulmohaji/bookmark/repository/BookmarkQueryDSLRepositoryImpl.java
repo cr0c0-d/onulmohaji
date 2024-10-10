@@ -14,10 +14,10 @@ public class BookmarkQueryDSLRepositoryImpl implements BookmarkQueryDSLRepositor
     private final QBookmark qBookmark = QBookmark.bookmark;
 
     @Override
-    public List<String> findPopupstoreBookmark(Long userId) {
+    public List<String> findPlaceIdListByUserIdAndPlaceType(Long userId, String placeType) {
         return jpaQueryFactory.select(qBookmark.placeId)
                 .from(qBookmark)
-                .where(qBookmark.placeType.eq("popup")
+                .where(qBookmark.placeType.eq(placeType)
                         .and(qBookmark.userId.eq(userId))
                 )
                 .fetch();
