@@ -7,6 +7,7 @@ import me.croco.onulmohaji.bookmark.repository.BookmarkRepository;
 import me.croco.onulmohaji.member.domain.Member;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,4 +35,9 @@ public class BookmarkService {
             return false;
         }
     }
+
+    public List<String> getBookmarkPlaceId(Member loginMember, String placeType) {
+        return bookmarkRepository.findPlaceIdListByUserIdAndPlaceType(loginMember.getId(), placeType);
+    }
+
 }

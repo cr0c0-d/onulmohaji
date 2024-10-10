@@ -1,14 +1,14 @@
 package me.croco.onulmohaji.popupstore.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import me.croco.onulmohaji.api.PopplyService;
-import me.croco.onulmohaji.dto.PlaceDetailFindResponse;
-import me.croco.onulmohaji.exhibition.domain.Exhibition;
-import me.croco.onulmohaji.exhibition.domain.ExhibitionDetail;
-import me.croco.onulmohaji.localcode.domain.Localcode;
-import me.croco.onulmohaji.localcode.service.LocalcodeService;
-import me.croco.onulmohaji.popupstore.domain.Popupstore;
+import me.croco.onulmohaji.bookmark.service.BookmarkService;
 import me.croco.onulmohaji.dto.PlaceListFindResponse;
+import me.croco.onulmohaji.localcode.service.LocalcodeService;
+import me.croco.onulmohaji.member.domain.Member;
+import me.croco.onulmohaji.member.service.MemberService;
+import me.croco.onulmohaji.popupstore.domain.Popupstore;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreDetail;
 import me.croco.onulmohaji.popupstore.domain.PopupstoreImage;
 import me.croco.onulmohaji.popupstore.dto.PopupDetailFindResponse;
@@ -25,9 +25,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PopupstoreController {
 
+    private final MemberService memberService;
     private final PopplyService popplyService;
     private final PopupstoreService popupstoreService;
     private final LocalcodeService localcodeService;
+    private final BookmarkService bookmarkService;
 
     /**
      * POPPLY를 통해 새로운 팝업스토어 목록 불러와 저장
@@ -38,10 +40,21 @@ public class PopupstoreController {
     }
 
     @GetMapping("/api/popup/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam int distance, @RequestParam(required = false) String keyword) {
+    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam int distance, @RequestParam(required = false) String keyword, HttpServletRequest request) {
         List<Popupstore> popupstoreList = popupstoreService.findPopupstoreListByDate(keyword, date, latitude, longitude, distance);
 
-        List<PlaceListFindResponse> popupstoreListFindResponseList = popupstoreList.stream().map(popupstore -> new PlaceListFindResponse(popupstore, latitude, longitude)).toList();
+        Member loginMember = memberService.getLoginMember(request);
+        List<String> bookmarkPopup = bookmarkService.getBookmarkPlaceId(loginMember, "popup");
+        List<PlaceListFindResponse> popupstoreListFindResponseList = popupstoreList.stream()
+                .map(popupstore -> new PlaceListFindResponse(popupstore, latitude, longitude))
+                .toList();
+
+        popupstoreListFindResponseList.forEach(placeListFindResponse -> {
+            if(bookmarkPopup.contains(placeListFindResponse.getPlaceId())) {
+                placeListFindResponse.setBookmark(true);
+            }
+        });
+
 
         return ResponseEntity.ok()
                 .body(popupstoreListFindResponseList);
