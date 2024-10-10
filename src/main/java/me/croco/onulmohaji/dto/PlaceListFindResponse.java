@@ -33,6 +33,7 @@ public class PlaceListFindResponse {
     private String endDate;
     private String placeUrl;
     private int distance;
+    private Boolean bookmark = false;
 
     public PlaceListFindResponse(Popupstore popupstore, Double latitude, Double longitude) {
         this.placeId = String.valueOf(popupstore.getStoreId());
