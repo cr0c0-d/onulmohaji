@@ -103,6 +103,6 @@ public class MemberService implements UserDetailsService {
         }
 
         // 로그인 멤버 반환
-        return memberRepository.findByEmail(authentication.getName()).get();
+        return memberRepository.findByEmail(authentication.getName()).orElse(null);
     }
 }
