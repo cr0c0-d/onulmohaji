@@ -40,4 +40,9 @@ public class BookmarkService {
         return bookmarkRepository.findPlaceIdListByUserIdAndPlaceType(loginMember.getId(), placeType);
     }
 
+    public List<Bookmark> getBookmarkList(Member loginMember) {
+        return bookmarkRepository.findByUserId(loginMember.getId());
+    }
+
+
 }
