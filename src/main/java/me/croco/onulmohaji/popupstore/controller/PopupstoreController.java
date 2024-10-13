@@ -40,25 +40,13 @@ public class PopupstoreController {
     }
 
     @GetMapping("/api/popup/list")
-    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam int distance, @RequestParam(required = false) String keyword, HttpServletRequest request) {
+    public ResponseEntity<List<PlaceListFindResponse>> findPopupstoreListByDate(@RequestParam String date, @RequestParam Double latitude, @RequestParam Double longitude, @RequestParam int distance, @RequestParam(required = false) String keyword) {
         List<Popupstore> popupstoreList = popupstoreService.findPopupstoreListByDate(keyword, date, latitude, longitude, distance);
 
 
         List<PlaceListFindResponse> popupstoreListFindResponseList = popupstoreList.stream()
                 .map(popupstore -> new PlaceListFindResponse(popupstore, latitude, longitude))
                 .toList();
-
-        Member loginMember = memberService.getLoginMember(request);
-
-        if(loginMember != null) {
-            List<String> bookmarkPopup = bookmarkService.getBookmarkPlaceId(loginMember, "popup");
-            popupstoreListFindResponseList.forEach(placeListFindResponse -> {
-                if (bookmarkPopup.contains(placeListFindResponse.getPlaceId())) {
-                    placeListFindResponse.setBookmark(true);
-                }
-            });
-        }
-
 
         return ResponseEntity.ok()
                 .body(popupstoreListFindResponseList);
