@@ -33,7 +33,7 @@ public class BookmarkController {
     }
 
     @GetMapping("/api/bookmark")
-    public ResponseEntity<List<BookmarkListFindResponse>> getBookmarkList(@RequestBody HttpServletRequest request) {
+    public ResponseEntity<List<BookmarkListFindResponse>> getBookmarkList(HttpServletRequest request) {
         Member loginMember = memberService.getLoginMember(request);
         List<Bookmark> bookmarkList = bookmarkService.getBookmarkList(loginMember);
 
