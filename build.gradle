@@ -75,6 +75,7 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
+    systemProperty "onulmohaji.croco.front", System.getProperties().get("onulmohaji.croco.front")
 }
 
 // QueryDSL 설정

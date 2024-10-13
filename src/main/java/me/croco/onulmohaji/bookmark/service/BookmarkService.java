@@ -36,10 +36,6 @@ public class BookmarkService {
         }
     }
 
-    public List<String> getBookmarkPlaceId(Member loginMember, String placeType) {
-        return bookmarkRepository.findPlaceIdListByUserIdAndPlaceType(loginMember.getId(), placeType);
-    }
-
     public List<Bookmark> getBookmarkList(Member loginMember) {
         return bookmarkRepository.findByUserId(loginMember.getId());
     }

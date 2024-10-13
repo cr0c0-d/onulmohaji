@@ -15,7 +15,7 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
         format_sql: true
-        ddl-auto: create, update
+        ddl-auto: update
 
   datasource:
     url: ENC(KZZmF4xUS1kxL20Zs3LlYVRPkFwwAom68AT0n+p/CfZM1WHYELGzXeqcetas4brvPMq5YINYCvJsiR1lQkc7+MujQHBZ9i124uWi61VoqtOjeeHHSq3CiS7jeD7+NgwtFo7+MU2zyGQOAzPNPtswS6Wdfo/2D/p2gawCs5uJ7z5gsI9+jIfM3vuN/MKd5yKy1j+JSMY6J3I=)
