@@ -103,4 +103,8 @@ public class FacilityService {
 
         return facilityRepository.findFoodListByPlace(latitude, longitude);
     }
+
+    public Facility findFacilityById(String id) {
+        return facilityRepository.findById(Long.valueOf(id)).orElse(null);
+    }
 }
