@@ -64,6 +64,9 @@ dependencies {
     // QueryDSL
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
 
+    // Spring Doc
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
     // java 컴파일러 플러그인
     annotationProcessor (
             "jakarta.annotation:jakarta.annotation-api", // java.lang.NoClassDefFoundError (javax.annotation.Generated) 에러 대응 코드
